@@ -16,7 +16,7 @@ Here I will also put some interesting links with useful information needed to do
 - find out how cv::CALIB_USE_INTRINSIC_GUESS works,
 - make some kind of indicator which shows how good calibration was,
 - optimize Makefile - for now it has some unnecesary stuff,
-- more thing soon...
+- more things soon...
 
 # Libraries
 - OpenCV 3.4.4
