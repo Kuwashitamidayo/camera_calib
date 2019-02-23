@@ -32,11 +32,11 @@ using namespace patch;
 // Path to pictures
 string pathToCalibPics;	// = "Pics/";
 // Width of calib chessboard as number of squares
-int chessboardWidth;// = 7;				
+unsigned int chessboardWidth;// = 7;				
 // Height of calib chessboard as number of squares	
-int chessboardHeight;// = 10;	
+unsigned int chessboardHeight;// = 10;	
 // Minimal amount of pics needed to start the calibration				
-int minAmountOfPicsToCalibrate = 20;		
+unsigned int minAmountOfPicsToCalibrate = 20;		
 // Size of square, in milimeters	
 float calibrationSquareSize;// = 15.0f;	
 // Size of chessboard = square intersections in each axis	
@@ -136,7 +136,7 @@ bool saveCameraCalibration(string name, string nameCalibPic, Mat cameraMatrix,
 	return true;
 }
 
-/* Error reprojection estimation - https://docs.opencv.org/3.1.0/d4/d94/tutorial_camera_calibration.html */
+/* Error reprojection estimation - https://docs.opencv.org/3.1.0/d4/d94/tutorial_camera_calibration.html 
 static double computeReprojectionErrors( const vector<vector<Point3f> >& objectPoints,
                                          const vector<vector<Point2f> >& imagePoints,
                                          const vector<Mat>& rvecs, const vector<Mat>& tvecs,
@@ -158,7 +158,7 @@ static double computeReprojectionErrors( const vector<vector<Point3f> >& objectP
         totalPoints     += n;
     }
     return std::sqrt(totalErr/totalPoints);
-}
+}*/
 
 
 string createJpgFile(int &savedImageCount) {
@@ -209,24 +209,36 @@ void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix) {
 
 }
 
-void parseParameters(int argc, char** argv, cv::String keys) {
-	pathToCalibPics = parser.get<string>("path");
-	//corners in x or y = amount of squares minus 1
-	chessboardWidth = parser.get<int>("w") - 1;
-	chessboardHeight = parser.get<int>("h") - 1;				
-	//minAmountOfPicsToCalibrate = parser.get<int>("");;		
-	calibrationSquareSize = parser.get<float>("squaresize");;	
+void inline parseParameters(int argc, char** argv, cv::String keys) {
+	CommandLineParser parser(argc, argv, keys);
+	if (parser.has("help"))
+	{
+    	parser.printMessage();
+    	//return 0;
+	}
+
+
+	if (parser.has("terminal") && ~parser.has("loadconf")) {
+		/*   Calib parameters   */
+		pathToCalibPics 		= parser.get<string>("path");
+		cout << "Current path: " << pathToCalibPics << std::endl;
+		calibrationSquareSize 	= parser.get<float>("squaresize");;	
+		//corners in x or y = amount of squares minus 1
+		chessboardWidth 		= parser.get<int>("w") - 1;
+		chessboardHeight 		= parser.get<int>("h") - 1;					
+
+		/*   Camera parameters   */
+		pixelSize   	= Point2d(parser.get<double>("px"), 
+								parser.get<double>("py"));
+		matrixMaxRes  	= Point(parser.get<int>("maxresx"), 
+								parser.get<int>("maxresy"));
+		matrixCurrRes 	= Point(parser.get<int>("currresx"), 
+								parser.get<int>("currresy"));
+		matrixSize  	= Point2d((double)matrixMaxRes.x * pixelSize.x, 
+								(double)matrixMaxRes.y * pixelSize.y);
+		focalLength 	= parser.get<double>("focal");
+	}
 	chessboardDimensions = Size(chessboardWidth, chessboardHeight);
-
-
-	pixelSize   = Point2d(parser.get<double>("px"), parser.get<double>("py"));
-	matrixMaxRes  = Point(parser.get<int>("maxresx"), 
-							parser.get<int>("maxresy"));
-	matrixCurrRes = Point(parser.get<int>("currresx"), 
-							parser.get<int>("currresy"));
-	matrixSize  = Point2d((double)matrixMaxRes.x * pixelSize.x, 
-									(double)matrixMaxRes.y * pixelSize.y);
-	focalLength = 	parser.get<double>("");
 
 	fx = (double)matrixCurrRes.x * focalLength / matrixSize.x;
 	fy = (double)matrixCurrRes.y * focalLength / matrixSize.y;
@@ -243,20 +255,24 @@ int main(int argc, char** argv)
 	*/
 
 	cv::String keys =
-		"{conffile		|			| configuration xml file with parameters}"
-		"{createconf	|			| create xml file with specified name}"
-        "{path	 		|Pics		| input image path}"	
-        "{prefix pre	|calib_pic_	| image prefix (for DSC000 = DSC}"
-        "{width w  		|			| square amount in x}"
-        "{height h 		|			| square amount in y}"
-        "{pixx px		|0.0014		| size of pixel in x axis in mm}"
-		"{pixy py		|0.0014		| size of pixel in y axis in mm}"
-		"{maxresx		|2592		| max camera resolution (x)}"
-		"{maxresy		|1944		| max camera resolution (y)}"
-		"{currresx		|640		| current camera resolution (x)}"
-		"{currresy		|480		| current camera resolution (y)}"
-        "{help   		|			| show help message}";
-	CommandLineParser parser(argc, argv, keys);
+		"{terminal      |           | force terminal mode}"
+		"{loadconf      |           | configuration xml file with parameters}"
+		"{createconf    |           | create xml file with specified name}"
+        "{path          |Pics/      | input image path}"	
+        "{prefix pre    |calib_pic_	| image prefix (for DSC000 = DSC}"
+        "{width w       |8			| square amount in x}"
+        "{height h      |11			| square amount in y}"
+		"{squaresize    |11			| square size in mm}"
+        "{pixx px       |0.0014		| size of pixel in x axis in mm}"
+		"{pixy py       |0.0014		| size of pixel in y axis in mm}"
+		"{maxresx       |2592		| max camera resolution (x)}"
+		"{maxresy       |1944		| max camera resolution (y)}"
+		"{currresx      |640		| current camera resolution (x)}"
+		"{currresy      |480		| current camera resolution (y)}"
+		"{focal         |6.0		| focal lenth of the camera}"
+        "{help          |           | show help message}";
+
+	parseParameters(argc, argv, keys);	
 	
 	Mat frame;
 	Mat drawToFrame;
@@ -314,7 +330,7 @@ int main(int argc, char** argv)
 		switch (character) 
 		{
 		case ' ':
-			//spacja - zapisz obraz
+			//spacebar - save the pic
 			if (found) {
 				Mat temp;
 
