@@ -7,6 +7,7 @@
 
 namespace patch
 {
+	//Converts any type to string.
     template < typename T > std::string to_string( const T& n )
     {
         std::ostringstream stm ;
@@ -30,28 +31,27 @@ using namespace patch;
 
 /* Calib init parameters */
 // Path to pictures
-string pathToCalibPics;	// = "Pics/";
+string pathToCalibPics;
 // Width of calib chessboard as number of squares
-unsigned int chessboardWidth;// = 7;				
+int chessboardWidth;
 // Height of calib chessboard as number of squares	
-unsigned int chessboardHeight;// = 10;	
+int chessboardHeight;
 // Minimal amount of pics needed to start the calibration				
 unsigned int minAmountOfPicsToCalibrate = 20;		
 // Size of square, in milimeters	
-float calibrationSquareSize;// = 15.0f;	
+float calibrationSquareSize;
 // Size of chessboard = square intersections in each axis	
-Size chessboardDimensions;// = Size(chessboardWidth, chessboardHeight);
+Size chessboardDimensions;
 
 /* Camera parameters */
 // Size of pixel in x and y axis in mm
-Point2d pixelSize;//   = Point2d(0.0014, 0.0014);
+Point2d pixelSize;
 // Max resolution of the camera
-Point matrixMaxRes;//  = Point(2592, 1944);
+Point matrixMaxRes;
 // Current set resolution of the camera
-Point matrixCurrRes;// = Point(640, 480);
+Point matrixCurrRes;
 // Size of the camera sensor in x and y axis in mm
-Point2d matrixSize;/*  = Point2d((double)matrixMaxRes.x * pixelSize.x, 
-									(double)matrixMaxRes.y * pixelSize.y);*/
+Point2d matrixSize;
 // Focal length in mm
 double focalLength;// = 	6.0;
 
@@ -69,7 +69,7 @@ void createKnownChessboardPosition(Size boardSize, float squareEdgeLength,
 	for (int i = 0; i < boardSize.height; i++) {
 		for (int j = 0; j < boardSize.width; j++) {
 			corners.push_back(Point3f(j * squareEdgeLength, 
-										i * squareEdgeLength, 0.0f));
+			  i * squareEdgeLength, 0.0f));
 		}
 	}
 }
@@ -101,36 +101,35 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize,
 	vector< vector< Point2f > > checkerboardImageSpacePoints;
 	cout << "Searching chessboard corners in progress..." << endl;
 	getChessboardCorners(calibrationImages, 
-							checkerboardImageSpacePoints, false);
+	  checkerboardImageSpacePoints, false);
 
 	vector< vector< Point3f > > worldSpaceCornerPoints(1);
 	cout << "Creating known chessboard positions..." << endl;
 	createKnownChessboardPosition(boardSize, squareEdgeLength, 
-									worldSpaceCornerPoints[0]);
+	  worldSpaceCornerPoints[0]);
 	cout << "Creating vector of size of chessboard corners amount..." << endl;
 	worldSpaceCornerPoints.resize(checkerboardImageSpacePoints.size(), 
-									worldSpaceCornerPoints[0]);
+	  worldSpaceCornerPoints[0]);
 
 	distanceCoefficients = Mat::zeros(8, 1, CV_64F);
 	cout << "Camera calibration started." << endl;
 	cout << cameraMatrix;
 	calibrateCamera(worldSpaceCornerPoints, checkerboardImageSpacePoints, 
-						boardSize, cameraMatrix, distanceCoefficients, 
-						rVectors, tVectors/*, CALIB_USE_INTRINSIC_GUESS*/);
+	  boardSize, cameraMatrix, distanceCoefficients, rVectors, tVectors
+	  /*, CALIB_USE_INTRINSIC_GUESS*/);
 	cout << "Camera calibration finished." << endl;
 }
 
 bool saveCameraCalibration(string name, string nameCalibPic, Mat cameraMatrix, 
-							Mat distanceCoefficients, vector<Mat> rVectors, 
-							vector<Mat> tVectors)
+  Mat distanceCoefficients, vector<Mat> rVectors, vector<Mat> tVectors)
 {
 	//Save calib parameters to .xml
 	FileStorage outStream(name, FileStorage::WRITE);
 	FileStorage outStreamPic(nameCalibPic, FileStorage::APPEND);
-	outStream << "cameraMatrix" << cameraMatrix;
-	outStream << "distanceCoefficients" << distanceCoefficients;
-	outStreamPic << "rVectors" << rVectors;
-	outStreamPic << "tVectors" << tVectors;
+    outStream       << "cameraMatrix" << cameraMatrix;
+    outStream       << "distanceCoefficients" << distanceCoefficients;
+    outStreamPic    << "rVectors" << rVectors;
+    outStreamPic    << "tVectors" << tVectors;
 	outStream.release();
 	outStreamPic.release();
 	return true;
@@ -186,15 +185,15 @@ and saves all camera parameters to camera_intrinsic.xml
 */
 void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix) {
 	
-	cameraMatrix.at<double>(0, 0)= fx;		      
-	cameraMatrix.at<double>(1, 0)= 0;				
-	cameraMatrix.at<double>(2, 0)= 0;				
-	cameraMatrix.at<double>(0, 1) = 0;
-	cameraMatrix.at<double>(1, 1) = fy;
-	cameraMatrix.at<double>(2, 1) = 0;
-	cameraMatrix.at<double>(0, 2)= cx;
-	cameraMatrix.at<double>(1, 2)= cy;
-	cameraMatrix.at<double>(2, 2)= 1;
+	cameraMatrix.at<double>(0, 0)	= fx;		      
+	cameraMatrix.at<double>(1, 0)	= 0;				
+	cameraMatrix.at<double>(2, 0)	= 0;				
+	cameraMatrix.at<double>(0, 1)	= 0;
+	cameraMatrix.at<double>(1, 1)	= fy;
+	cameraMatrix.at<double>(2, 1)	= 0;
+	cameraMatrix.at<double>(0, 2)	= cx;
+	cameraMatrix.at<double>(1, 2)	= cy;
+	cameraMatrix.at<double>(2, 2)	= 1;
 		
 
 	FileStorage outCamStream("camera_intrinsic.xml", FileStorage::WRITE);
@@ -209,14 +208,17 @@ void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix) {
 
 }
 
-void inline parseParameters(int argc, char** argv, cv::String keys) {
+/*
+Method to parse parameters from command line or xml file to a program.
+It can also write loaded parameters to another xml file.
+*/
+void inline parseParameters(int argc, char** argv, cv::String &keys) {
 	CommandLineParser parser(argc, argv, keys);
 	if (parser.has("help"))
 	{
     	parser.printMessage();
     	//return 0;
 	}
-
 
 	if (parser.has("terminal") && ~parser.has("loadconf")) {
 		/*   Calib parameters   */
@@ -229,14 +231,42 @@ void inline parseParameters(int argc, char** argv, cv::String keys) {
 
 		/*   Camera parameters   */
 		pixelSize   	= Point2d(parser.get<double>("px"), 
-								parser.get<double>("py"));
+		  parser.get<double>("py"));
 		matrixMaxRes  	= Point(parser.get<int>("maxresx"), 
-								parser.get<int>("maxresy"));
+		  parser.get<int>("maxresy"));
 		matrixCurrRes 	= Point(parser.get<int>("currresx"), 
-								parser.get<int>("currresy"));
+		  parser.get<int>("currresy"));
 		matrixSize  	= Point2d((double)matrixMaxRes.x * pixelSize.x, 
-								(double)matrixMaxRes.y * pixelSize.y);
+		  (double)matrixMaxRes.y * pixelSize.y);
 		focalLength 	= parser.get<double>("focal");
+	}
+
+	if (parser.has("terminal") && parser.has("loadconf")) {
+		cv::FileStorage readParams("calib_conf.xml", FileStorage::READ);
+		readParams["pathToCalibPics"] 		>>	pathToCalibPics;
+		readParams["calibrationSquareSize"] >>	calibrationSquareSize;
+		readParams["chessboardWidth"] 		>>	chessboardWidth;
+		readParams["chessboardHeight"] 		>>	chessboardHeight;
+		readParams["pixelSize"] 			>>	pixelSize;
+		readParams["matrixMaxRes"] 			>>	matrixMaxRes;	
+		readParams["matrixCurrRes"] 		>>	matrixCurrRes;	
+		readParams["matrixSize"] 			>>	matrixSize;	
+		readParams["focalLength"] 			>>	focalLength;				
+		readParams.release();	
+	}
+
+	if (parser.has("terminal") && parser.has("createconf")) {
+		cv::FileStorage outCalibStream("calib_conf.xml", FileStorage::WRITE);
+		outCalibStream << "pathToCalibPics"			<< pathToCalibPics;
+		outCalibStream << "calibrationSquareSize"	<< calibrationSquareSize;
+		outCalibStream << "chessboardWidth"			<< chessboardWidth;
+		outCalibStream << "chessboardHeight"		<< chessboardHeight;
+		outCalibStream << "pixelSize"				<< pixelSize;
+		outCalibStream << "matrixMaxRes"			<< matrixMaxRes;	
+		outCalibStream << "matrixCurrRes"			<< matrixCurrRes;	
+		outCalibStream << "matrixSize"				<< matrixSize;	
+		outCalibStream << "focalLength"				<< focalLength;				
+		outCalibStream.release();	
 	}
 	chessboardDimensions = Size(chessboardWidth, chessboardHeight);
 
@@ -258,19 +288,19 @@ int main(int argc, char** argv)
 		"{terminal      |           | force terminal mode}"
 		"{loadconf      |           | configuration xml file with parameters}"
 		"{createconf    |           | create xml file with specified name}"
-        "{path          |Pics/      | input image path}"	
-        "{prefix pre    |calib_pic_	| image prefix (for DSC000 = DSC}"
-        "{width w       |8			| square amount in x}"
-        "{height h      |11			| square amount in y}"
+		"{path          |Pics/      | input image path}"	
+		"{prefix pre    |calib_pic_	| image prefix (for DSC000 = DSC}"
+		"{width w       |8			| square amount in x}"
+		"{height h      |11			| square amount in y}"
 		"{squaresize    |11			| square size in mm}"
-        "{pixx px       |0.0014		| size of pixel in x axis in mm}"
+		"{pixx px       |0.0014		| size of pixel in x axis in mm}"
 		"{pixy py       |0.0014		| size of pixel in y axis in mm}"
 		"{maxresx       |2592		| max camera resolution (x)}"
 		"{maxresy       |1944		| max camera resolution (y)}"
 		"{currresx      |640		| current camera resolution (x)}"
 		"{currresy      |480		| current camera resolution (y)}"
 		"{focal         |6.0		| focal lenth of the camera}"
-        "{help          |           | show help message}";
+		"{help          |           | show help message}";
 
 	parseParameters(argc, argv, keys);	
 	
@@ -303,7 +333,6 @@ int main(int argc, char** argv)
 
 	namedWindow("Calibration window", CV_WINDOW_AUTOSIZE);
 
-
 	int savedImageCount = 0;
 
 	while (true) 
@@ -316,11 +345,11 @@ int main(int argc, char** argv)
 		bool found = false;
 
 		found = findChessboardCorners(frame, chessboardDimensions, foundPoints,
-					CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_NORMALIZE_IMAGE |
-					CV_CALIB_CB_FAST_CHECK);		// | CV_CALIB_CB_FAST_CHECK
+		  CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_NORMALIZE_IMAGE |
+		  CV_CALIB_CB_FAST_CHECK);		// | CV_CALIB_CB_FAST_CHECK
 		frame.copyTo(drawToFrame);
 		drawChessboardCorners(drawToFrame, chessboardDimensions, foundPoints, 
-								found);
+		  found);
 		if (found)
 			imshow("Calibration window", drawToFrame); 
 		else
@@ -334,10 +363,11 @@ int main(int argc, char** argv)
 			if (found) {
 				Mat temp;
 
-				 do {
+				do {
 					filename = createJpgFile(savedImageCount);
 					cout << filename << std::endl;
 				} while (exists_file(filename));
+
 				cout << filename << std::endl;
 				frame.copyTo(temp);
 				imwrite(filename, temp);
@@ -350,7 +380,7 @@ int main(int argc, char** argv)
 			//tab - read calibration pics from calib_pictures folder
 			savedImageCount = 0;
 			cout << "Loading pics from: " << pathToCalibPics << 
-					" to the memory in progress..." << endl;
+			  " to the memory in progress..." << endl;
 			vector<string> calibFiles;
 
 			do {
@@ -365,13 +395,13 @@ int main(int argc, char** argv)
 					savedImages.push_back(tempPic);
 					calibFiles.push_back(filename);
 					found = findChessboardCorners(tempPic, 
-								chessboardDimensions, foundPoints, 
-								CV_CALIB_CB_ADAPTIVE_THRESH | 
-								CV_CALIB_CB_NORMALIZE_IMAGE);		
-								// | CV_CALIB_CB_FAST_CHECK
+					  chessboardDimensions, foundPoints, 
+					  CV_CALIB_CB_ADAPTIVE_THRESH | 
+					  CV_CALIB_CB_NORMALIZE_IMAGE);		
+					  //| CV_CALIB_CB_FAST_CHECK
 					frame.copyTo(drawToFrame);
 					drawChessboardCorners(tempPic, chessboardDimensions, 
-											foundPoints, found);
+					  foundPoints, found);
 					imshow(filename, tempPic);
 					cout << "Loaded " << filename << "." << endl;
 				}
@@ -381,7 +411,7 @@ int main(int argc, char** argv)
 			cout << "Loading pictures finished." << endl;
 
 			FileStorage outStream("camera_calibration_pic_data.xml", 
-									FileStorage::WRITE);
+			  FileStorage::WRITE);
 			outStream << "picsUsedToCalib" << calibFiles;
 			outStream.release();
 			}
@@ -392,18 +422,17 @@ int main(int argc, char** argv)
 
 			if (savedImages.size() > minAmountOfPicsToCalibrate) {
 				cameraCalibration(savedImages, chessboardDimensions, 
-									calibrationSquareSize, cameraMatrix, 
+				  calibrationSquareSize, cameraMatrix, 
 									distanceCoefficients, rVectors, tVectors);
 				saveCameraCalibration("camera_calibration.xml", 
-										"camera_calibration_pic_data.xml", 
-										cameraMatrix, distanceCoefficients, 
-										rVectors, tVectors);
+				  "camera_calibration_pic_data.xml", cameraMatrix, 
+				  distanceCoefficients, rVectors, tVectors);
 				cout << "Calibration ended successfully!" << endl;
 				break;
 			}
 			cout << "Not enough pictures for calibration! At least " 
-						<< minAmountOfPicsToCalibrate <<" of pics are needed."
-						<< endl;
+			  << minAmountOfPicsToCalibrate <<" of pics are needed."
+			  << endl;
 			break;
 		case 27:
 			//escape - exit program
