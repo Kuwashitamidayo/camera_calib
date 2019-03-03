@@ -3,7 +3,7 @@
 </p>
 
 # Camera calibration using OpenCV - project
-Alghoritm in C++ for camera calibration using OpenCV. The plan is to create a camera calibration program with some nice GUI (using Qt or cvui library). This is the small part of my master's dissertation that I will show here. The other part, which uses calibration parameters to undistort the camera and recognize pose of elements on the picture will not be shown nor avalable.\
+The plan is to create a camera calibration program with some nice GUI (using Qt library). This is the small part of my master's dissertation that I will show here. The other part, which uses calibration parameters to undistort the camera and recognize pose of elements on the picture will not be shown nor avalable.\
 I will think of making both C++ and Python versions (just to have some comparison) and maybe I will make some processing time comparison.\
 The base alghoritm is based on YouTube manual, see comments in the code.\
 Here I will also put some interesting links with useful information needed to do camera calibration correctly.
@@ -18,5 +18,6 @@ Here I will also put some interesting links with useful information needed to do
 - optimize Makefile - for now it has some unnecesary stuff,
 - more things soon...
 
-# Libraries
+# Libraries and used software
 - OpenCV 3.4.4
+- Qt Creator 3.5.1 based on Qt 5.5.1
