@@ -64,7 +64,7 @@ double cy = matrixCurrRes.y / 2;
 
 /* Beginning of the program */
 void createKnownChessboardPosition(Size boardSize, float squareEdgeLength, 
-										vector<Point3f>& corners)
+  vector<Point3f>& corners)
 {
 	for (int i = 0; i < boardSize.height; i++) {
 		for (int j = 0; j < boardSize.width; j++) {
@@ -94,9 +94,8 @@ void getChessboardCorners(vector<Mat> images,
 }
 
 void cameraCalibration(vector<Mat> calibrationImages, Size boardSize, 
-						float squareEdgeLength, Mat &cameraMatrix, 
-						Mat &distanceCoefficients, vector<Mat> &rVectors, 
-						vector<Mat> &tVectors)
+  float squareEdgeLength, Mat &cameraMatrix, Mat &distanceCoefficients,
+  vector<Mat> &rVectors, vector<Mat> &tVectors)
 {
 	vector< vector< Point2f > > checkerboardImageSpacePoints;
 	cout << "Searching chessboard corners in progress..." << endl;
@@ -289,17 +288,17 @@ int main(int argc, char** argv)
 		"{loadconf      |           | configuration xml file with parameters}"
 		"{createconf    |           | create xml file with specified name}"
 		"{path          |Pics/      | input image path}"	
-		"{prefix pre    |calib_pic_	| image prefix (for DSC000 = DSC}"
-		"{width w       |8			| square amount in x}"
-		"{height h      |11			| square amount in y}"
-		"{squaresize    |11			| square size in mm}"
-		"{pixx px       |0.0014		| size of pixel in x axis in mm}"
-		"{pixy py       |0.0014		| size of pixel in y axis in mm}"
-		"{maxresx       |2592		| max camera resolution (x)}"
-		"{maxresy       |1944		| max camera resolution (y)}"
-		"{currresx      |640		| current camera resolution (x)}"
-		"{currresy      |480		| current camera resolution (y)}"
-		"{focal         |6.0		| focal lenth of the camera}"
+		"{prefix pre    |calib_pic_ | image prefix (for DSC000 = DSC}"
+		"{width w       |8          | square amount in x}"
+		"{height h      |11         | square amount in y}"
+		"{squaresize    |15.0       | square size in mm}"
+		"{pixx px       |0.0014     | size of pixel in x axis in mm}"
+		"{pixy py       |0.0014     | size of pixel in y axis in mm}"
+		"{maxresx       |2592       | max camera resolution (x)}"
+		"{maxresy       |1944       | max camera resolution (y)}"
+		"{currresx      |640        | current camera resolution (x)}"
+		"{currresy      |480        | current camera resolution (y)}"
+		"{focal         |6.0        | focal lenth of the camera}"
 		"{help          |           | show help message}";
 
 	parseParameters(argc, argv, keys);	
@@ -423,7 +422,7 @@ int main(int argc, char** argv)
 			if (savedImages.size() > minAmountOfPicsToCalibrate) {
 				cameraCalibration(savedImages, chessboardDimensions, 
 				  calibrationSquareSize, cameraMatrix, 
-									distanceCoefficients, rVectors, tVectors);
+				  distanceCoefficients, rVectors, tVectors);
 				saveCameraCalibration("camera_calibration.xml", 
 				  "camera_calibration_pic_data.xml", cameraMatrix, 
 				  distanceCoefficients, rVectors, tVectors);
