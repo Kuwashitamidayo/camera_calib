@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1084</width>
-    <height>649</height>
+    <width>1242</width>
+    <height>676</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,10 +20,10 @@
    <widget class="QGroupBox" name="gBoxCalibParams">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>20</x>
       <y>0</y>
-      <width>281</width>
-      <height>541</height>
+      <width>500</width>
+      <height>620</height>
      </rect>
     </property>
     <property name="locale">
@@ -33,14 +33,102 @@
      <string>Calibration parameters</string>
     </property>
     <property name="alignment">
-     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     <set>Qt::AlignCenter</set>
     </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <widget class="QPlainTextEdit" name="textLogWindw">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>480</y>
+       <width>460</width>
+       <height>120</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="textImagesPath">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>55</y>
+       <width>460</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLabel" name="ImagesPath">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>310</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Path to calibration pictures:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonPathImages">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>85</y>
+       <width>460</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Select path...</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelCameraParamsPath">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>125</y>
+       <width>310</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Path to camera parameters (optional)</string>
+     </property>
+    </widget>
+    <widget class="QTextBrowser" name="textCameraParamsPath">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>150</y>
+       <width>460</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="buttonPathCameraParam">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>180</y>
+       <width>460</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Select path...</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QPushButton" name="pButPrevPicture">
     <property name="geometry">
      <rect>
-      <x>580</x>
-      <y>530</y>
+      <x>740</x>
+      <y>560</y>
       <width>80</width>
       <height>33</height>
      </rect>
@@ -52,8 +140,8 @@
    <widget class="QPushButton" name="pButNextPicture">
     <property name="geometry">
      <rect>
-      <x>780</x>
-      <y>530</y>
+      <x>940</x>
+      <y>560</y>
       <width>80</width>
       <height>33</height>
      </rect>
@@ -65,8 +153,8 @@
    <widget class="QLabel" name="qtCalibImage">
     <property name="geometry">
      <rect>
-      <x>400</x>
-      <y>0</y>
+      <x>560</x>
+      <y>10</y>
       <width>640</width>
       <height>480</height>
      </rect>
@@ -84,13 +172,34 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QLabel" name="textImagesCount">
+    <property name="geometry">
+     <rect>
+      <x>560</x>
+      <y>510</y>
+      <width>640</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>0/0</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1084</width>
+     <width>1242</width>
      <height>23</height>
     </rect>
    </property>
@@ -103,7 +212,7 @@
     <enum>TopToolBarArea</enum>
    </attribute>
    <attribute name="toolBarBreak">
-    <bool>true</bool>
+    <bool>false</bool>
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>

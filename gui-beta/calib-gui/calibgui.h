@@ -13,10 +13,18 @@ class CalibGui : public QMainWindow
 
 public:
     explicit CalibGui(QWidget *parent = 0);
+    //virtual void loadFromFile();
     ~CalibGui();
+
+private slots:
+    void on_buttonPathImages_clicked();
+
+    void on_buttonPathCameraParam_clicked();
 
 private:
     Ui::CalibGui *ui;
 };
+
+
 
 #endif // CALIBGUI_H
