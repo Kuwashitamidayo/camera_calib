@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1242</width>
-    <height>676</height>
+    <width>1240</width>
+    <height>720</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -23,7 +23,7 @@
       <x>20</x>
       <y>0</y>
       <width>500</width>
-      <height>620</height>
+      <height>230</height>
      </rect>
     </property>
     <property name="locale">
@@ -41,16 +41,6 @@
     <property name="checkable">
      <bool>false</bool>
     </property>
-    <widget class="QPlainTextEdit" name="textLogWindw">
-     <property name="geometry">
-      <rect>
-       <x>20</x>
-       <y>480</y>
-       <width>460</width>
-       <height>120</height>
-      </rect>
-     </property>
-    </widget>
     <widget class="QTextBrowser" name="textImagesPath">
      <property name="geometry">
       <rect>
@@ -128,9 +118,9 @@
     <property name="geometry">
      <rect>
       <x>740</x>
-      <y>560</y>
+      <y>500</y>
       <width>80</width>
-      <height>33</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -141,9 +131,9 @@
     <property name="geometry">
      <rect>
       <x>940</x>
-      <y>560</y>
+      <y>500</y>
       <width>80</width>
-      <height>33</height>
+      <height>30</height>
      </rect>
     </property>
     <property name="text">
@@ -175,10 +165,10 @@
    <widget class="QLabel" name="textImagesCount">
     <property name="geometry">
      <rect>
-      <x>560</x>
-      <y>510</y>
-      <width>640</width>
-      <height>20</height>
+      <x>820</x>
+      <y>500</y>
+      <width>120</width>
+      <height>30</height>
      </rect>
     </property>
     <property name="font">
@@ -193,13 +183,168 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
+   <widget class="QTextEdit" name="textLogWindow">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>560</y>
+      <width>460</width>
+      <height>90</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>DejaVu Sans Mono</family>
+      <pointsize>7</pointsize>
+     </font>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QGroupBox" name="gCalibChessboard">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>230</y>
+      <width>500</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="title">
+     <string>Calibration chessboard settings</string>
+    </property>
+    <widget class="QLabel" name="labelCalibSquaremm">
+     <property name="geometry">
+      <rect>
+       <x>430</x>
+       <y>90</y>
+       <width>40</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>mm</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignCenter</set>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelCalibBoardH">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>60</y>
+       <width>310</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Calibration board squares height:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelCalibBoardW">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>310</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Calibration board squares width:</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="labelCalibSquareSize">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>90</y>
+       <width>310</width>
+       <height>25</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Square side size:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="textCalibBoardW">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>30</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="textCalibBoardH">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>60</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="textCalibSquareSize">
+     <property name="geometry">
+      <rect>
+       <x>350</x>
+       <y>90</y>
+       <width>80</width>
+       <height>25</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QGroupBox" name="gBoxCameraParams">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>360</y>
+      <width>500</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="locale">
+     <locale language="English" country="UnitedKingdom"/>
+    </property>
+    <property name="title">
+     <string>Camera parameters</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <widget class="QPushButton" name="buttonChangeCamSettings">
+     <property name="geometry">
+      <rect>
+       <x>20</x>
+       <y>30</y>
+       <width>460</width>
+       <height>30</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Change camera settings...</string>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1242</width>
+     <width>1240</width>
      <height>23</height>
     </rect>
    </property>

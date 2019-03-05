@@ -14,6 +14,7 @@ class CalibGui : public QMainWindow
 public:
     explicit CalibGui(QWidget *parent = 0);
     //virtual void loadFromFile();
+    virtual QString getLogTime();
     ~CalibGui();
 
 private slots:
