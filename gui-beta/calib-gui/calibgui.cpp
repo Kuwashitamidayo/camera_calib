@@ -11,6 +11,7 @@ QStringList fileNames;    //for images
 QString fileName;         //for config file
 
 
+
 CalibGui::CalibGui(QWidget *parent) :
   QMainWindow(parent),
   ui(new Ui::CalibGui)
@@ -18,11 +19,17 @@ CalibGui::CalibGui(QWidget *parent) :
   ui->setupUi(this);
   ui->textImagesPath->setText("No files selected");
   ui->textCameraParamsPath->setText("No files selected");
+  //connect(ui->buttonChangeCamSettings, SIGNAL(clicked()), this, SLOT(showCameraSettings()));
 }
 
 /** Returns the current time with space (format: "HH:MM ") **/
 QString CalibGui::getLogTime() {
   return fileTime.currentTime().toString("HH:mm") + " ";
+}
+
+void CalibGui::showCameraSettings()
+{
+      window.show();
 }
 
 
@@ -70,4 +77,9 @@ void CalibGui::on_buttonPathCameraParam_clicked()
     ui->textCameraParamsPath->setText(fileName);
     ui->textLogWindow->append(getLogTime() + "Loaded " + fileName);
   }
+}
+
+void CalibGui::on_buttonChangeCamSettings_clicked()
+{
+  showCameraSettings();
 }
