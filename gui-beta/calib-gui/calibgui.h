@@ -15,7 +15,7 @@ class CalibGui : public QMainWindow
 public:
     explicit CalibGui(QWidget *parent = 0);
     virtual QString getLogTime();
-    virtual void showCameraSettings();
+    virtual void updatePicture(int count);
     ~CalibGui();
 
 private slots:
@@ -24,6 +24,10 @@ private slots:
     void on_buttonPathCameraParam_clicked();
 
     void on_buttonChangeCamSettings_clicked();
+
+    void on_pButPrevPicture_clicked();
+
+    void on_pButNextPicture_clicked();
 
 private:
     Ui::CalibGui *ui;

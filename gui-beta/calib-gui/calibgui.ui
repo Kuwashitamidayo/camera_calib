@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Camera Calibration program by Krystian Talaga</string>
+   <string>Camera calibration program by K. Talaga</string>
   </property>
   <property name="locale">
    <locale language="English" country="UnitedKingdom"/>
@@ -140,7 +140,7 @@
      <string>&gt;&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="qtCalibImage">
+   <widget class="QLabel" name="imgCalibImage">
     <property name="geometry">
      <rect>
       <x>560</x>
@@ -156,7 +156,7 @@
      <enum>QFrame::Box</enum>
     </property>
     <property name="text">
-     <string>Here comes an image of calibration chessboard</string>
+     <string>There's nothing to display here. Add some pictures to calibrate using menu on the left.</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -177,7 +177,7 @@
      </font>
     </property>
     <property name="text">
-     <string>0/0</string>
+     <string>0 / 0</string>
     </property>
     <property name="alignment">
      <set>Qt::AlignCenter</set>
@@ -337,6 +337,102 @@
       <string>Change camera settings...</string>
      </property>
     </widget>
+   </widget>
+   <widget class="QWidget" name="verticalLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>440</y>
+      <width>181</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayoutCamMatrix">
+     <item>
+      <widget class="QLabel" name="labelCameraMatrix">
+       <property name="text">
+        <string>Camera Matrix</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelCamRow1">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hahaha</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelCamRow2">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hehehe</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="labelCamRow3">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hihihi</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QLabel" name="labelIsChessFound">
+    <property name="geometry">
+     <rect>
+      <x>1049</x>
+      <y>469</y>
+      <width>150</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Chessboard not found</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>740</x>
+      <y>540</y>
+      <width>281</width>
+      <height>33</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Start Calibration</string>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">

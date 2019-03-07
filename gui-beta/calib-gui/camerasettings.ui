@@ -163,7 +163,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>mm</string>
+      <string>px</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -339,7 +339,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>mm</string>
+      <string>px</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

@@ -14,8 +14,7 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         calibgui.cpp \
-    camerasettings.cpp \
-    ocvcalib.cpp
+    camerasettings.cpp
 
 HEADERS  += calibgui.h \
     camerasettings.h
