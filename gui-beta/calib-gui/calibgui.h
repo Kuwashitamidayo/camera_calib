@@ -2,7 +2,16 @@
 #define CALIBGUI_H
 
 #include <QMainWindow>
+#include <QTime>
+#include <QFileDialog>
+#include <QMessageBox>
+#include <QDir>
+#include <QDoubleValidator>
+#include <QIntValidator>
+#include <QDebug>
 #include <camerasettings.h>
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/core.hpp>
 
 namespace Ui {
   class CalibGui;
@@ -16,6 +25,9 @@ public:
     explicit CalibGui(QWidget *parent = 0);
     virtual QString getLogTime();
     virtual void updatePicture(int count);
+    virtual void updatePicture(cv::Mat someMat);
+    virtual cv::String toCvString(QString text);
+    virtual std::vector<cv::String> toVector(QStringList texts);
     ~CalibGui();
 
 private slots:
@@ -32,6 +44,7 @@ private slots:
 private:
     Ui::CalibGui *ui;
     CameraSettings window;
+
 };
 
 

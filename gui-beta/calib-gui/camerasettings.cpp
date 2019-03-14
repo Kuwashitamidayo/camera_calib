@@ -1,8 +1,5 @@
 #include "camerasettings.h"
 #include "ui_camerasettings.h"
-#include <QDoubleValidator>
-#include <QIntValidator>
-#include <QDebug>
 
 CameraSettings::CameraSettings(QWidget *parent) :
     QDockWidget(parent),

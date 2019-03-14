@@ -2,6 +2,9 @@
 #define CAMERASETTINGS_H
 
 #include <QDockWidget>
+#include <QDoubleValidator>
+#include <QIntValidator>
+#include <QDebug>
 
 namespace Ui {
   class CameraSettings;

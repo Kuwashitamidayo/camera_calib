@@ -1,20 +1,15 @@
 #include "calibgui.h"
 #include "ui_calibgui.h"
-#include <QFileDialog>
-#include <QMessageBox>
-#include <QDir>
-#include <QTime>
-#include <QDoubleValidator>
-#include <QIntValidator>
-#include <QDebug>
 
+using namespace cv;
+using namespace std;
 
 QTime fileTime;
 QStringList fileNames;          //for images
 QString fileName;               //for config file
+vector<cv::String> cvFiles;     //for image processing
 int countImages = 0;
 int totalImages = 0;
-
 
 
 
@@ -36,12 +31,15 @@ CalibGui::CalibGui(QWidget *parent) :
       ui->labelCamRow1->setText("fx\t\t\t\t0 \t\t\t\tcx");
       ui->labelCamRow2->setText("0 \t\t\t\tfy\t\t\t\tcy");
       ui->labelCamRow3->setText("0 \t\t\t\t0 \t\t\t\t1 ");
-      //pLabel->setStyleSheet("QLabel { background-color : red; color : blue; }");
       ui->labelIsChessFound->
               setStyleSheet("QLabel {background-color : black; color: red;}");
+      QString path = "../../Pics/calib_pic_000.png";        //for tests only
+      cv::Mat inputImage = cv::imread(toCvString(path), 1); //for tests only
+      updatePicture(inputImage);                            //for tests only
+
 }
 
-/** Returns the current time with space (format: "HH:MM ") **/
+/* Returns the current time with space (format: "HH:MM ") */
 QString CalibGui::getLogTime() {
       return fileTime.currentTime().toString("HH:mm") + " ";
 }
@@ -57,6 +55,23 @@ void CalibGui::updatePicture(int count) {
                                  + QString::number(totalImages));
 }
 
+void CalibGui::updatePicture(cv::Mat someMat) {
+    QImage receivedImage ((uchar*) someMat.data, someMat.cols, someMat.rows, someMat.step, QImage::Format_RGB888);
+    ui->imgCalibImage->setScaledContents(true);
+    ui->imgCalibImage->setPixmap(QPixmap::fromImage(receivedImage));
+}
+
+cv::String CalibGui::toCvString(QString text) {
+    return (cv::String) text.toStdString();
+}
+
+vector<cv::String> CalibGui::toVector(QStringList texts) {
+    vector<cv::String> cvList;
+    for (int i = 0; i < texts.size(); i++) {
+        cvList.push_back(toCvString(texts[i]));
+    }
+    return cvList;
+}
 
 CalibGui::~CalibGui()
 {
@@ -73,6 +88,7 @@ CalibGui::~CalibGui()
 void CalibGui::on_buttonPathImages_clicked()
 {
     int count;
+    cvFiles.clear();
     fileNames = QFileDialog::getOpenFileNames(this,
         "Select images to calibrate the camera", QDir::currentPath(),
         "Image files (*.jpg *.jpeg *.png);; All Files (*)");
@@ -87,6 +103,7 @@ void CalibGui::on_buttonPathImages_clicked()
         }
         for (int i = 0; i <= count; i++) {
             ui->textLogWindow->append(getLogTime() + "Added " + fileNames[i]);
+            cvFiles.push_back(toCvString(fileNames[i]));
         }
         ui->textLogWindow->append(getLogTime() + "Total: " +
             QString::number(fileNames.size()) + " images.");
