@@ -18,6 +18,12 @@ Here I will also put some interesting links with useful information needed to do
 - optimize Makefile - for now it has some unnecesary stuff,
 - more things soon...
 
+# Sample screenshots of program
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Kuwashitamidayo/camera_calib/master/Screenshots/screen_001.png">
+</p>
+
 # Libraries and used software
 - OpenCV 3.4.4
 - Qt Creator 3.5.1 based on Qt 5.5.1
