@@ -13,14 +13,17 @@ TEMPLATE = app
 
 INCLUDEPATH += -I. -I/usr/local/include/opencv-lopencv_features2d
 LIBS += -L/usr/local/lib/opencv -lopencv_core -lopencv_imgproc \
--lopencv_imgcodecs -lopencv_features2d -lopencv_video -lopencv_ccalib \
+-lopencv_imgcodecs -lopencv_features2d -lopencv_video \
+-lopencv_calib3d -lopencv_highgui
 
 SOURCES += main.cpp\
         calibgui.cpp \
-    camerasettings.cpp
+    camerasettings.cpp \
+    ocvcalib.cpp
 
 HEADERS  += calibgui.h \
-    camerasettings.h
+    camerasettings.h \
+    ocvcalib.h
 
 FORMS    += calibgui.ui \
     camerasettings.ui

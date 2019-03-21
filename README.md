@@ -9,21 +9,36 @@ The base alghoritm is based on YouTube manual, see comments in the code.\
 Here I will also put some interesting links with useful information needed to do camera calibration correctly.
 
 # To-do list
-- make it able to run both in GUI and non-GUI mode,
-- in GUI mode everything is set in window, no command window is shown,
-- in non-GUI mode parameters must be passed via command window, displaying images with detected chessboard corners is only optional (minimum displaying),
-- make the alghoritm more flexible; after compilation it must be able to be used with any calibration chessboard,
-- find out how cv::CALIB_USE_INTRINSIC_GUESS works,
-- make some kind of indicator which shows how good calibration was,
-- optimize Makefile - for now it has some unnecesary stuff,
+- (70%) make it able to run both in GUI and non-GUI mode (for now in seperate files, planned to do it inone file),
+- (80%) in GUI mode everything is set in window, no command window is shown,
+- (95%) in non-GUI mode parameters must be passed via command window, displaying images with detected chessboard corners is only optional (minimum displaying),
+- (100%) make the alghoritm more flexible; after compilation it must be able to be used with any calibration chessboard,
+- (20%) find out how *cv::CALIB_USE_INTRINSIC_GUESS* works,
+- (50%) make some kind of indicator which shows how good calibration was,
+- (90%) optimize Makefile - for now it has some unnecesary stuff,
+- (60%) run GUI and terminal mode of the progra within one file,
 - more things soon...
 
-# Sample screenshots of program
+# Sample screenshots of the program
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/Kuwashitamidayo/camera_calib/master/Screenshots/screen_001.png">
 </p>
 
+# How to run the program
+
+## Using terminal mode
+- open Terminal, go to folder *terminal_beta*,
+- make the program using *make*,
+- call program in terminal mode using *./calibration -terminal*
+
+## Using gui mode
+- open QT Creator,
+- open the project in *gui_beta*,
+- compile it and run.
+
+
 # Libraries and used software
 - OpenCV 3.4.4
 - Qt Creator 3.5.1 based on Qt 5.5.1
+- Linux (here Linux Mint 18.3), after a few changes it can be converted to run under Windows

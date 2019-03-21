@@ -287,7 +287,7 @@ int main(int argc, char** argv)
 		"{terminal      |           | force terminal mode}"
 		"{loadconf      |           | configuration xml file with parameters}"
 		"{createconf    |           | create xml file with specified name}"
-		"{path          |Pics/      | input image path}"	
+		"{path          |../Pics/      | input image path}"	
 		"{prefix pre    |calib_pic_ | image prefix (for DSC000 = DSC}"
 		"{width w       |8          | square amount in x}"
 		"{height h      |11         | square amount in y}"
