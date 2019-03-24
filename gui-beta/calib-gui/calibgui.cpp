@@ -61,6 +61,25 @@ void CalibGui::updatePicture(cv::Mat someMat) {
     ui->imgCalibImage->setPixmap(QPixmap::fromImage(receivedImage));
 }
 
+void CalibGui::updatePicture(vector<cv::Mat> someMat, int count) {
+    QImage receivedImage ((uchar*) someMat[count-1].data, someMat[count-1].cols,
+            someMat[count-1].rows, someMat[count-1].step, QImage::Format_RGB888);
+    ui->imgCalibImage->setScaledContents(true);
+    ui->imgCalibImage->setPixmap(QPixmap::fromImage(receivedImage));
+
+    ui->textImagesCount->setText(QString::number(count) + " / "
+                                 + QString::number(someMat.size()));
+    if (found[count-1]) {
+        ui->labelIsChessFound->setText("Chessboard found");
+        ui->labelIsChessFound->setStyleSheet("QLabel {background-color : black;"
+                                             " color: green;}");
+    } else {
+        ui->labelIsChessFound->setText("Chessboard not found");
+        ui->labelIsChessFound->setStyleSheet("QLabel {background-color : black;"
+                                             " color: red;}");
+    }
+}
+
 cv::String CalibGui::toCvString(QString text) {
     return (cv::String) text.toStdString();
 }
@@ -78,7 +97,6 @@ CalibGui::~CalibGui()
     delete ui;
 }
 
-
 //QImage a ((uchar*) someMat.data, someMat.cols, someMat.rows, someMat.step, QImage::Format_RGB888);
 //QImage b ((uchar*) someMat.data, someMat.cols, someMat.rows, someMat.step, QImage);
 
@@ -88,11 +106,20 @@ CalibGui::~CalibGui()
 void CalibGui::on_buttonPathImages_clicked()
 {
     int count;
-    cvFiles.clear();
+
+    vector<Vec2f> foundPoints;
+    chessboardDimensions = cv::Size(camera.chessboardWidth - 1,
+                                    camera.chessboardHeight - 1);
+
     fileNames = QFileDialog::getOpenFileNames(this,
         "Select images to calibrate the camera", QDir::currentPath(),
         "Image files (*.jpg *.jpeg *.png);; All Files (*)");
     if(fileNames.size() > 0) {
+        // clearing vectors
+        found.clear();
+        cvFiles.clear();
+        matChessPics.clear();
+
         totalImages = fileNames.size();
         count = fileNames.size()-1;
         if (count == 0) {
@@ -104,11 +131,20 @@ void CalibGui::on_buttonPathImages_clicked()
         for (int i = 0; i <= count; i++) {
             ui->textLogWindow->append(getLogTime() + "Added " + fileNames[i]);
             cvFiles.push_back(toCvString(fileNames[i]));
+
+            cv::Mat tempPic = imread(cvFiles[i]);
+            found.push_back(findChessboardCorners(tempPic, chessboardDimensions,
+                                          foundPoints,
+                                          CV_CALIB_CB_ADAPTIVE_THRESH |
+                                          CV_CALIB_CB_NORMALIZE_IMAGE));
+            drawChessboardCorners(tempPic, chessboardDimensions,
+                                  foundPoints, found[i]);
+            matChessPics.push_back(tempPic);
         }
+        updatePicture(matChessPics, 1);
+
         ui->textLogWindow->append(getLogTime() + "Total: " +
             QString::number(fileNames.size()) + " images.");
-        updatePicture(1);
-
       }
 }
 
@@ -120,19 +156,24 @@ void CalibGui::on_buttonPathCameraParam_clicked()
       if(fileName != "") {
             ui->textCameraParamsPath->setText(fileName);
             ui->textLogWindow->append(getLogTime() + "Loaded " + fileName);
+            ::loadParametersFromXml(toCvString(fileName), camera);
+            ui->textCalibBoardW->setText(QString::number(camera.chessboardWidth));
+            ui->textCalibBoardH->setText(QString::number(camera.chessboardHeight));
+            ui->textCalibSquareSize->setText(QString::number(camera.calibrationSquareSize));
+            cameraSettings.setCameraSettings(camera);
       }
 }
 
 void CalibGui::on_buttonChangeCamSettings_clicked()
 {
-            window.show();
+            cameraSettings.show();
 }
 
 void CalibGui::on_pButPrevPicture_clicked()
 {
     if (countImages > 1) {
         countImages--;
-        updatePicture(countImages);
+        updatePicture(matChessPics, countImages);
     }
 }
 
@@ -140,6 +181,6 @@ void CalibGui::on_pButNextPicture_clicked()
 {
     if (countImages < totalImages) {
         countImages++;
-        updatePicture(countImages);
+        updatePicture(matChessPics, countImages);
     }
 }

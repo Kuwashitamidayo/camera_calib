@@ -5,6 +5,7 @@
 #include <QDoubleValidator>
 #include <QIntValidator>
 #include <QDebug>
+#include <ocvcalib.h>
 
 namespace Ui {
   class CameraSettings;
@@ -16,6 +17,7 @@ class CameraSettings : public QDockWidget
 
 public:
   explicit CameraSettings(QWidget *parent = 0);
+  virtual void setCameraSettings(CalibParams camera);
   ~CameraSettings();
 
 private slots:

@@ -3,7 +3,10 @@
 
 CameraSettings::CameraSettings(QWidget *parent) :
     QDockWidget(parent),
-    ui(new Ui::CameraSettings)
+    ui(new Ui::CameraSettings),
+    camCurrResX(0), camCurrResY(0),
+    camMatrixSizeX(0.0), camMatrixSizeY(0.0),
+    camPixSizeX(0.0), camPixSizeY(0.0), focalLength(0.0)
 {
     QDoubleValidator *camElemSizeVal = new QDoubleValidator( 0.000001, 1000.0, 6, this );
     camElemSizeVal->setNotation(QDoubleValidator::StandardNotation);
@@ -18,21 +21,27 @@ CameraSettings::CameraSettings(QWidget *parent) :
     ui->textMaxCamResY->setValidator(resVal);
     ui->textCurrentCamResX->setValidator(resVal);
     ui->textCurrentCamResY->setValidator(resVal);
-    camCurrResX = 0;
-    camCurrResY = 0;
-    camMaxResX = 0;
-    camMaxResY = 0;
-    camMatrixSizeX = 0.0;
-    camMatrixSizeY = 0.0;
-    camPixSizeX = 0.0;
-    camPixSizeY = 0.0;
-    focalLength = 0.0;
 }
 
 CameraSettings::~CameraSettings()
 {
     delete ui;
 }
+
+void CameraSettings::setCameraSettings(CalibParams camera)
+{
+    ui->textCamMatrixSizeX->setText(QString::number(camera.matrixSize.x));
+    ui->textCamMatrixSizeY->setText(QString::number(camera.matrixSize.y));
+    ui->textCamPixSizeX->setText(QString::number(camera.pixelSize.x));
+    ui->textCamPixSizeY->setText(QString::number(camera.pixelSize.y));
+    ui->textFocalLength->setText(QString::number(camera.focalLength));
+    ui->textMaxCamResX->setText(QString::number(camera.matrixMaxRes.x));
+    ui->textMaxCamResY->setText(QString::number(camera.matrixMaxRes.y));
+    ui->textCurrentCamResX->setText(QString::number(camera.matrixCurrRes.x));
+    ui->textCurrentCamResY->setText(QString::number(camera.matrixCurrRes.y));
+    ui->comboCameraName->addItem(QString::fromStdString((string)camera.header));
+}
+
 
 void CameraSettings::on_textCamPixSizeX_textChanged(const QString &arg1)
 {

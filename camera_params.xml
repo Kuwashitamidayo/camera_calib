@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<opencv_storage>
+<header>"Raspberry Pi Camera 2.0 B"</header>
+<calibrationSquareSize>15.0</calibrationSquareSize>
+<chessboardWidth>8</chessboardWidth>
+<chessboardHeight>11</chessboardHeight>
+<pixelSize>
+  1.4000000000000000e-03 1.4000000000000000e-03</pixelSize>
+<matrixMaxRes>
+  2592 1944</matrixMaxRes>
+<matrixCurrRes>
+  640 480</matrixCurrRes>
+<matrixSize>
+  3.6288000000000000e+00 2.7216000000000000e+00</matrixSize>
+<focalLength>6.0</focalLength>
+<cameraMatrix type_id="opencv-matrix">
+  <rows>3</rows>
+  <cols>3</cols>
+  <dt>d</dt>
+  <data>
+    1.0582010582010582e+03 0. 320. 0. 1.0582010582010582e+03 240. 0. 0.
+    1.</data></cameraMatrix>
+</opencv_storage>

@@ -18,9 +18,39 @@ namespace patch
     }
 }
 
+namespace cv
+{
+    struct CalibParams {
+        /* Calib init parameters */
+        // Path to pictures
+        String pathToCalibPics;
+        // Size of square, in milimeters
+        float calibrationSquareSize;
+        // Width of calib chessboard as number of squares
+        int chessboardWidth;
+        // Height of calib chessboard as number of squares
+        int chessboardHeight;
+
+        /* Camera parameters */
+        // name of the camera (optional)
+        String header;
+        // Size of pixel in x and y axis in mm
+        Point2d pixelSize;
+        // Max resolution of the camera
+        Point matrixMaxRes;
+        // Current set resolution of the camera
+        Point matrixCurrRes;
+        // Size of the camera sensor in x and y axis in mm
+        Point2d matrixSize;
+        // Focal length in mm
+        double focalLength;
+    };
+}
+
 using namespace std;
 using namespace cv;
 using namespace patch;
+
 
 void createKnownChessboardPosition(Size boardSize, float squareEdgeLength,
   vector<Point3f>& corners);
@@ -40,6 +70,9 @@ string createJpgFile(int &savedImageCount);
 inline bool exists_file(const std::string &name);
 void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix);
 void inline parseParameters(int argc, char** argv, cv::String &keys);
+void loadParametersFromXml(cv::String filename, CalibParams &camera);
+void inline saveParametersToXml(cv::String filename, CalibParams camera);
+
 
 
 #endif // OCVCALIB
