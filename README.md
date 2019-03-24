@@ -22,7 +22,7 @@ Here I will also put some interesting links with useful information needed to do
 # Sample screenshots of the program
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/Kuwashitamidayo/camera_calib/master/Screenshots/screen_001.png">
+  <img src="https://raw.githubusercontent.com/Kuwashitamidayo/camera_calib/master/Screenshots/screen_002.png">
 </p>
 
 # How to run the program
