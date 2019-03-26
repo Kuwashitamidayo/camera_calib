@@ -256,7 +256,7 @@ void inline parseParameters(int argc, char** argv, cv::String &keys, CalibParams
     }
 
     if (parser.has("terminal") && parser.has("createconf")) {
-        saveParametersToXml("calib_conf.xml", camera);
+        saveParametersToXml("calib_conf.xml", camera, "");
     }
     chessboardDimensions = Size(camera.chessboardWidth,
                                 camera.chessboardHeight);
@@ -285,9 +285,10 @@ void loadParametersFromXml(cv::String filename, CalibParams &camera) {
     readParams.release();
 }
 
-void inline saveParametersToXml(cv::String filename, CalibParams camera) {
+void saveParametersToXml(cv::String filename, CalibParams camera,
+                                cv::String header) {
     cv::FileStorage outCalibStream(filename, FileStorage::WRITE);
-    outCalibStream << "header"                  << camera.header;
+    outCalibStream << "header"                  << header;//camera.header;
     outCalibStream << "pathToCalibPics"			<< camera.pathToCalibPics;
     outCalibStream << "calibrationSquareSize"	<< camera.calibrationSquareSize;
     outCalibStream << "chessboardWidth"			<< camera.chessboardWidth;

@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTime>
 #include <QFileDialog>
+#include <QInputDialog>
 #include <QMessageBox>
 #include <QDir>
 #include <QDoubleValidator>
@@ -44,6 +45,10 @@ private slots:
     void on_pButPrevPicture_clicked();
 
     void on_pButNextPicture_clicked();
+
+    void on_buttonPathCameraParam_2_clicked();
+
+    void on_buttonExportCameraParam_clicked();
 
 private:
     Ui::CalibGui *ui;

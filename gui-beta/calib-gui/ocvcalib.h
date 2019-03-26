@@ -71,7 +71,7 @@ inline bool exists_file(const std::string &name);
 void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix);
 void inline parseParameters(int argc, char** argv, cv::String &keys);
 void loadParametersFromXml(cv::String filename, CalibParams &camera);
-void inline saveParametersToXml(cv::String filename, CalibParams camera);
+void saveParametersToXml(cv::String filename, CalibParams camera, cv::String header);
 
 
 

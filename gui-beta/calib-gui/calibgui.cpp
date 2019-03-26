@@ -31,11 +31,11 @@ CalibGui::CalibGui(QWidget *parent) :
       ui->labelCamRow1->setText("fx\t\t\t\t0 \t\t\t\tcx");
       ui->labelCamRow2->setText("0 \t\t\t\tfy\t\t\t\tcy");
       ui->labelCamRow3->setText("0 \t\t\t\t0 \t\t\t\t1 ");
-      ui->labelIsChessFound->
-              setStyleSheet("QLabel {background-color : black; color: red;}");
-      QString path = "../../Pics/calib_pic_000.png";        //for tests only
-      cv::Mat inputImage = cv::imread(toCvString(path), 1); //for tests only
-      updatePicture(inputImage);                            //for tests only
+//      ui->labelIsChessFound->
+//              setStyleSheet("QLabel {background-color : black; color: red;}");
+//      QString path = "../../Pics/calib_pic_000.png";        //for tests only
+//      cv::Mat inputImage = cv::imread(toCvString(path), 1); //for tests only
+//      updatePicture(inputImage);                            //for tests only
 
 }
 
@@ -111,41 +111,51 @@ void CalibGui::on_buttonPathImages_clicked()
     chessboardDimensions = cv::Size(camera.chessboardWidth - 1,
                                     camera.chessboardHeight - 1);
 
-    fileNames = QFileDialog::getOpenFileNames(this,
-        "Select images to calibrate the camera", QDir::currentPath(),
-        "Image files (*.jpg *.jpeg *.png);; All Files (*)");
-    if(fileNames.size() > 0) {
-        // clearing vectors
-        found.clear();
-        cvFiles.clear();
-        matChessPics.clear();
+    if (((camera.chessboardHeight > 0)) && (camera.chessboardWidth > 0)
+            && (camera.calibrationSquareSize > 0))
+    {
+        fileNames = QFileDialog::getOpenFileNames(this,
+            "Select images to calibrate the camera", QDir::currentPath(),
+            "Image files (*.jpg *.jpeg *.png);; All Files (*)");
+        if(fileNames.size() > 0)
+        {
+            // clearing vectors
+            found.clear();
+            cvFiles.clear();
+            matChessPics.clear();
 
-        totalImages = fileNames.size();
-        count = fileNames.size()-1;
-        if (count == 0) {
-            ui->textImagesPath->setText(fileNames[0]);
-        } else {
-            ui->textImagesPath->setText(fileNames[0] + " and " +
-                QString::number(count) + " more");
+            totalImages = fileNames.size();
+            count = fileNames.size()-1;
+            if (count == 0) {
+                ui->textImagesPath->setText(fileNames[0]);
+            } else {
+                ui->textImagesPath->setText(fileNames[0] + " and " +
+                    QString::number(count) + " more");
+            }
+            for (int i = 0; i <= count; i++) {
+                ui->textLogWindow->append(getLogTime() + "Added " + fileNames[i]);
+                cvFiles.push_back(toCvString(fileNames[i]));
+
+                cv::Mat tempPic = imread(cvFiles[i]);
+                found.push_back(findChessboardCorners(tempPic, chessboardDimensions,
+                                              foundPoints,
+                                              CV_CALIB_CB_ADAPTIVE_THRESH |
+                                              CV_CALIB_CB_NORMALIZE_IMAGE));
+                drawChessboardCorners(tempPic, chessboardDimensions,
+                                      foundPoints, found[i]);
+                matChessPics.push_back(tempPic);
+            }
+            updatePicture(matChessPics, 1);
+
+            ui->textLogWindow->append(getLogTime() + "Total: " +
+                QString::number(fileNames.size()) + " images.");
         }
-        for (int i = 0; i <= count; i++) {
-            ui->textLogWindow->append(getLogTime() + "Added " + fileNames[i]);
-            cvFiles.push_back(toCvString(fileNames[i]));
-
-            cv::Mat tempPic = imread(cvFiles[i]);
-            found.push_back(findChessboardCorners(tempPic, chessboardDimensions,
-                                          foundPoints,
-                                          CV_CALIB_CB_ADAPTIVE_THRESH |
-                                          CV_CALIB_CB_NORMALIZE_IMAGE));
-            drawChessboardCorners(tempPic, chessboardDimensions,
-                                  foundPoints, found[i]);
-            matChessPics.push_back(tempPic);
-        }
-        updatePicture(matChessPics, 1);
-
-        ui->textLogWindow->append(getLogTime() + "Total: " +
-            QString::number(fileNames.size()) + " images.");
-      }
+    } else {
+        QString msg = "Please enter calibration chessboard settings first. "
+                       "Otherwise, error will occur!";
+        QMessageBox::warning(this, "Warning - parameters are missing", msg);
+        ui->textCalibBoardW->setFocus();
+    }
 }
 
 void CalibGui::on_buttonPathCameraParam_clicked()
@@ -183,4 +193,20 @@ void CalibGui::on_pButNextPicture_clicked()
         countImages++;
         updatePicture(matChessPics, countImages);
     }
+}
+
+void CalibGui::on_buttonExportCameraParam_clicked()
+{
+    QString fileType = "XML file (*.xml)";
+    QString saveFile = ".xml";
+    saveFile = QFileDialog::getSaveFileName(this,
+        "Save parameters as configuration file", QDir::currentPath(),
+        "XML file (*.xml);; YML file (*.yml);; All Files (*)", &fileType);
+    bool ok;
+    QString text = QInputDialog::getText(0, "Input dialog",
+                                         "Please enter the name of the camera:",
+                                         QLineEdit::Normal,"", &ok);
+    cv::String header = toCvString(text);
+    if (ok)
+    {::saveParametersToXml(toCvString(saveFile), this->camera, header);}
 }
