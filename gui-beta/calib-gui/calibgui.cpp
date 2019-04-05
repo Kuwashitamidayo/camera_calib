@@ -8,14 +8,16 @@ QTime fileTime;
 QStringList fileNames;          //for images
 QString fileName;               //for config file
 vector<cv::String> cvFiles;     //for image processing
-int countImages = 0;
-int totalImages = 0;
+vector<cv::Mat> cvImages;
 
 
 
 CalibGui::CalibGui(QWidget *parent) :
       QMainWindow(parent),
-      ui(new Ui::CalibGui)
+      ui(new Ui::CalibGui),
+      minAmountOfPicsToCalibrate(0),
+      countImages(0),
+      totalImages(0)
 {
       QDoubleValidator *squareSizeVal = new QDoubleValidator( 0.01, 100.0, 2, this );
       squareSizeVal->setNotation(QDoubleValidator::StandardNotation);
@@ -31,12 +33,15 @@ CalibGui::CalibGui(QWidget *parent) :
       ui->labelCamRow1->setText("fx\t\t\t\t0 \t\t\t\tcx");
       ui->labelCamRow2->setText("0 \t\t\t\tfy\t\t\t\tcy");
       ui->labelCamRow3->setText("0 \t\t\t\t0 \t\t\t\t1 ");
-//      ui->labelIsChessFound->
-//              setStyleSheet("QLabel {background-color : black; color: red;}");
 //      QString path = "../../Pics/calib_pic_000.png";        //for tests only
 //      cv::Mat inputImage = cv::imread(toCvString(path), 1); //for tests only
 //      updatePicture(inputImage);                            //for tests only
 
+}
+
+CalibGui::~CalibGui()
+{
+    delete ui;
 }
 
 /* Returns the current time with space (format: "HH:MM ") */
@@ -44,6 +49,7 @@ QString CalibGui::getLogTime() {
       return fileTime.currentTime().toString("HH:mm") + " ";
 }
 
+// Displays count'th picture if loaded,
 void CalibGui::updatePicture(int count) {
     countImages = count;
     totalImages = fileNames.size();
@@ -55,12 +61,14 @@ void CalibGui::updatePicture(int count) {
                                  + QString::number(totalImages));
 }
 
+// Displays picture given from OpenCV Mat class
 void CalibGui::updatePicture(cv::Mat someMat) {
     QImage receivedImage ((uchar*) someMat.data, someMat.cols, someMat.rows, someMat.step, QImage::Format_RGB888);
     ui->imgCalibImage->setScaledContents(true);
     ui->imgCalibImage->setPixmap(QPixmap::fromImage(receivedImage));
 }
 
+// Displays count'th picture from vector of Mats
 void CalibGui::updatePicture(vector<cv::Mat> someMat, int count) {
     QImage receivedImage ((uchar*) someMat[count-1].data, someMat[count-1].cols,
             someMat[count-1].rows, someMat[count-1].step, QImage::Format_RGB888);
@@ -80,10 +88,12 @@ void CalibGui::updatePicture(vector<cv::Mat> someMat, int count) {
     }
 }
 
+// Converts QString to cv::String
 cv::String CalibGui::toCvString(QString text) {
     return (cv::String) text.toStdString();
 }
 
+// Converts QStringList to vector of cv::Strings
 vector<cv::String> CalibGui::toVector(QStringList texts) {
     vector<cv::String> cvList;
     for (int i = 0; i < texts.size(); i++) {
@@ -92,25 +102,30 @@ vector<cv::String> CalibGui::toVector(QStringList texts) {
     return cvList;
 }
 
-CalibGui::~CalibGui()
-{
-    delete ui;
+vector<cv::Mat> CalibGui::extractPicsWithChessboard(vector<cv::Mat> images) {
+    vector<cv::Mat> resultImages;
+    for (unsigned int i = 0; i < images.size(); i++) {
+        if (this->found[i]) resultImages.push_back(images[i]);
+    }
+    return resultImages;
 }
 
-//QImage a ((uchar*) someMat.data, someMat.cols, someMat.rows, someMat.step, QImage::Format_RGB888);
-//QImage b ((uchar*) someMat.data, someMat.cols, someMat.rows, someMat.step, QImage);
 
-//ui-> qtCalibImage ->setPixMap(QPixmap::fromImage(a);
-//ui-> qtCalibImage ->setPixMap(QPixmap::fromImage(b);
+/*
+ * Buttons and other GUI based actions are served below
+ */
 
+// Load pictures, providing that parameters are given
 void CalibGui::on_buttonPathImages_clicked()
 {
     int count;
 
     vector<Vec2f> foundPoints;
+    /* in window you enter number of squares in x and y, you need intersections
+     * between squares, that's why 1 s substracted */
     chessboardDimensions = cv::Size(camera.chessboardWidth - 1,
                                     camera.chessboardHeight - 1);
-
+    // check if needed parameters are positive numbers greater than 0
     if (((camera.chessboardHeight > 0)) && (camera.chessboardWidth > 0)
             && (camera.calibrationSquareSize > 0))
     {
@@ -135,8 +150,9 @@ void CalibGui::on_buttonPathImages_clicked()
             for (int i = 0; i <= count; i++) {
                 ui->textLogWindow->append(getLogTime() + "Added " + fileNames[i]);
                 cvFiles.push_back(toCvString(fileNames[i]));
-
-                cv::Mat tempPic = imread(cvFiles[i]);
+                cvImages.push_back(imread(cvFiles[i]));
+                // that's why parameters are needed - chesboard is marked here
+                cv::Mat tempPic = cvImages[i].clone();
                 found.push_back(findChessboardCorners(tempPic, chessboardDimensions,
                                               foundPoints,
                                               CV_CALIB_CB_ADAPTIVE_THRESH |
@@ -151,6 +167,7 @@ void CalibGui::on_buttonPathImages_clicked()
                 QString::number(fileNames.size()) + " images.");
         }
     } else {
+        // warning message if parameters are incorrect
         QString msg = "Please enter calibration chessboard settings first. "
                        "Otherwise, error will occur!";
         QMessageBox::warning(this, "Warning - parameters are missing", msg);
@@ -158,6 +175,7 @@ void CalibGui::on_buttonPathImages_clicked()
     }
 }
 
+// Loads parameters from external xml/yml file
 void CalibGui::on_buttonPathCameraParam_clicked()
 {
       fileName = QFileDialog::getOpenFileName(this,
@@ -174,11 +192,13 @@ void CalibGui::on_buttonPathCameraParam_clicked()
       }
 }
 
+// Shows window with camera paremeters
 void CalibGui::on_buttonChangeCamSettings_clicked()
 {
             cameraSettings.show();
 }
 
+// Show previous picture from vector
 void CalibGui::on_pButPrevPicture_clicked()
 {
     if (countImages > 1) {
@@ -187,6 +207,7 @@ void CalibGui::on_pButPrevPicture_clicked()
     }
 }
 
+// Show next picture from vector
 void CalibGui::on_pButNextPicture_clicked()
 {
     if (countImages < totalImages) {
@@ -195,6 +216,7 @@ void CalibGui::on_pButNextPicture_clicked()
     }
 }
 
+// Export parameters to external xml/yml file
 void CalibGui::on_buttonExportCameraParam_clicked()
 {
     QString fileType = "XML file (*.xml)";
@@ -209,4 +231,50 @@ void CalibGui::on_buttonExportCameraParam_clicked()
     cv::String header = toCvString(text);
     if (ok)
     {::saveParametersToXml(toCvString(saveFile), this->camera, header);}
+}
+
+// Starts the calibration, providing that parameters are given and pictures are loaded
+// Not finished yet
+void CalibGui::on_pButStartCalibration_clicked()
+{
+    Mat distanceCoefficients;
+    vector<Mat> tVectors, rVectors;
+    vector<Mat> savedImages = extractPicsWithChessboard(cvImages);
+    cameraMatrix = ::getCameraMatrix(camera);
+    chessboardDimensions = cv::Size(camera.chessboardWidth - 1,
+                                    camera.chessboardHeight - 1);
+    if (savedImages.size() > (unsigned int)minAmountOfPicsToCalibrate) {
+        // starts the calibration
+        ui->textLogWindow->append(getLogTime() + "Calibration has started...");
+//        ::cameraCalibration()
+
+        ::cameraCalibration(savedImages, chessboardDimensions,
+          camera.calibrationSquareSize, cameraMatrix,
+          distanceCoefficients, rVectors, tVectors, camera);
+        ::saveCameraCalibration("camera_calibration.xml",
+          "camera_calibration_pic_data.xml", cameraMatrix,
+          distanceCoefficients, rVectors, tVectors);
+        ui->textLogWindow->append(getLogTime() +
+                                  "Calibration ended successfully!");
+
+    } else if (savedImages.size() < (unsigned int)minAmountOfPicsToCalibrate &&
+               savedImages.size() > 0) {
+        ui->textLogWindow->append(getLogTime() +
+                                  "Not enough pictures for calibration! At least "
+                                  + minAmountOfPicsToCalibrate +
+                                  " of pictures are needed (loaded " +
+                                  savedImages.size() + " with chessboard deected).");
+    } else {
+        QString msg = "Please load some pictures first! \n Remember, on at least "
+                + QString::number((float)minAmountOfPicsToCalibrate) +
+                " of them chessboard must be detected!";
+        QMessageBox::warning(this, "Warning - no pictures loaded", msg);
+        ui->textCalibBoardW->setFocus();
+        ui->textLogWindow->append(getLogTime() +
+                                  "Not enough pictures for calibration! At least "
+                                  + (int)minAmountOfPicsToCalibrate +
+                                  " of pictures are needed (loaded " +
+                                  (int)savedImages.size() + " with chessboard detected).");
+    }
+
 }

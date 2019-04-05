@@ -33,6 +33,7 @@ public:
     virtual void updatePicture(vector<cv::Mat> someMat, int count);
     virtual cv::String toCvString(QString text);
     virtual std::vector<cv::String> toVector(QStringList texts);
+    virtual std::vector<cv::Mat> extractPicsWithChessboard(vector<cv::Mat> images);
     ~CalibGui();
 
 private slots:
@@ -50,6 +51,8 @@ private slots:
 
     void on_buttonExportCameraParam_clicked();
 
+    void on_pButStartCalibration_clicked();
+
 private:
     Ui::CalibGui *ui;
     CameraSettings cameraSettings;
@@ -57,6 +60,11 @@ private:
     cv::Size chessboardDimensions;
     vector<cv::Mat> matChessPics;
     vector<bool> found;
+    cv::Mat cameraMatrix;
+
+    int minAmountOfPicsToCalibrate;
+    int countImages;
+    int totalImages;
 
 };
 

@@ -63,8 +63,12 @@ void createKnownChessboardPosition(Size boardSize, float squareEdgeLength,
 }
 
 void getChessboardCorners(vector<Mat> images,
-        vector< vector< Point2f > > &allFoundCorners, bool showResults = false)
+        vector< vector< Point2f > > &allFoundCorners, CalibParams camera,
+        bool showResults = false)
 {
+    Size chessboardDimensions = Size(camera.chessboardWidth - 1,
+                                     camera.chessboardHeight - 1);
+                cv::imshow("test", images[images.size()-1]);
     for (vector<Mat>::iterator iter = images.begin(); iter != images.end();
             ++iter) {
         vector<Point2f> pointBuf;
@@ -72,9 +76,14 @@ void getChessboardCorners(vector<Mat> images,
           pointBuf, CV_CALIB_CB_ADAPTIVE_THRESH | CV_CALIB_CB_NORMALIZE_IMAGE);
 
         if (found) { allFoundCorners.push_back(pointBuf); }
+//        FileStorage outStream("test_2.yml", FileStorage::WRITE);
+//        outStream       << "pointBuf" << pointBuf;
+//        outStream.release();
+
         if (showResults) {
             drawChessboardCorners(*iter, chessboardDimensions,
                                     pointBuf, found);
+;
             cv::imshow("Looking for corners", *iter);
             cv::waitKey(0);
         }
@@ -83,28 +92,38 @@ void getChessboardCorners(vector<Mat> images,
 
 void cameraCalibration(vector<Mat> calibrationImages, Size boardSize,
   float squareEdgeLength, Mat &cameraMatrix, Mat &distanceCoefficients,
-  vector<Mat> &rVectors, vector<Mat> &tVectors)
+  vector<Mat> &rVectors, vector<Mat> &tVectors, CalibParams camera)
 {
     vector< vector< Point2f > > checkerboardImageSpacePoints;
-    cout << "Searching chessboard corners in progress..." << endl;
+//    cout << "Searching chessboard corners in progress..." << endl;
     getChessboardCorners(calibrationImages,
-      checkerboardImageSpacePoints, false);
+      checkerboardImageSpacePoints, camera, false);
 
     vector< vector< Point3f > > worldSpaceCornerPoints(1);
-    cout << "Creating known chessboard positions..." << endl;
+//    cout << "Creating known chessboard positions..." << endl;
     createKnownChessboardPosition(boardSize, squareEdgeLength,
       worldSpaceCornerPoints[0]);
-    cout << "Creating vector of size of chessboard corners amount..." << endl;
+//    cout << "Creating vector of size of chessboard corners amount..." << endl;
     worldSpaceCornerPoints.resize(checkerboardImageSpacePoints.size(),
       worldSpaceCornerPoints[0]);
 
     distanceCoefficients = Mat::zeros(8, 1, CV_64F);
-    cout << "Camera calibration started." << endl;
-    cout << cameraMatrix;
+//    cout << "Camera calibration started." << endl;
+//    cout << cameraMatrix;
+
+//    FileStorage outStream("test.yml", FileStorage::WRITE);
+//    outStream       << "worldSpaceCornerPoints" << worldSpaceCornerPoints;
+//    outStream       << "checkerboardImageSpacePoints" << checkerboardImageSpacePoints;
+//    outStream       << "boardSize" << boardSize;
+//    outStream       << "cameraMatrix" << cameraMatrix;
+//    outStream       << "distanceCoefficients" << distanceCoefficients;
+//    outStream       << "rVectors" << rVectors;
+//    outStream       << "tVectors" << tVectors;
+//    outStream.release();
+
     calibrateCamera(worldSpaceCornerPoints, checkerboardImageSpacePoints,
-      boardSize, cameraMatrix, distanceCoefficients, rVectors, tVectors
-      /*, CALIB_USE_INTRINSIC_GUESS*/);
-    cout << "Camera calibration finished." << endl;
+      boardSize, cameraMatrix, distanceCoefficients, rVectors, tVectors);
+//    cout << "Camera calibration finished." << endl;
 }
 
 bool saveCameraCalibration(string name, string nameCalibPic, Mat cameraMatrix,
@@ -171,6 +190,7 @@ Creates matrix of camera parameters which looks like this:
 and saves all camera parameters to camera_intrinsic.xml
 */
 void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix) {
+    cameraMatrix = Mat::eye(3, 3, CV_64F);
 
     cameraMatrix.at<double>(0, 0)	= fx;
     cameraMatrix.at<double>(1, 0)	= 0;
@@ -196,7 +216,7 @@ void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix) {
 }
 
 cv::Mat getCameraMatrix(CalibParams camera) {
-    cv::Mat cameraMatrix;
+    cv::Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
 
     double fx = (double)camera.matrixCurrRes.x * camera.focalLength
             / camera.matrixSize.x;

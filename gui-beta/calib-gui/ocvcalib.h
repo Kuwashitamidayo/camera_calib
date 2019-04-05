@@ -55,10 +55,11 @@ using namespace patch;
 void createKnownChessboardPosition(Size boardSize, float squareEdgeLength,
   vector<Point3f>& corners);
 void getChessboardCorners(vector<Mat> images,
-    vector< vector< Point2f > > &allFoundCorners, bool showResults);
+    vector< vector< Point2f > > &allFoundCorners,
+    CalibParams camera, bool showResults);
 void cameraCalibration(vector<Mat> calibrationImages, Size boardSize,
     float squareEdgeLength, Mat &cameraMatrix, Mat &distanceCoefficients,
-    vector<Mat> &rVectors, vector<Mat> &tVectors);
+    vector<Mat> &rVectors, vector<Mat> &tVectors, CalibParams camera);
 bool saveCameraCalibration(string name, string nameCalibPic, Mat cameraMatrix,
     Mat distanceCoefficients, vector<Mat> rVectors, vector<Mat> tVectors);
 /*static double computeReprojectionErrors( const vector<vector<Point3f> >& objectPoints,
@@ -72,6 +73,7 @@ void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix);
 void inline parseParameters(int argc, char** argv, cv::String &keys);
 void loadParametersFromXml(cv::String filename, CalibParams &camera);
 void saveParametersToXml(cv::String filename, CalibParams camera, cv::String header);
+cv::Mat getCameraMatrix(CalibParams camera);
 
 
 

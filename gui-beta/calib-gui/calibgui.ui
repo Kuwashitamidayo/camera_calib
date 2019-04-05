@@ -524,7 +524,7 @@
      <set>Qt::AlignCenter</set>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="pButStartCalibration">
     <property name="geometry">
      <rect>
       <x>740</x>
