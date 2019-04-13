@@ -30,9 +30,17 @@ CalibGui::CalibGui(QWidget *parent) :
       ui->textCalibSquareSize->setValidator(squareSizeVal);
       qDebug() << "ui->textCalibSquareSize->validator()->parent()";
       qDebug() << ui->textCalibSquareSize->validator()->parent();
-      ui->labelCamRow1->setText("fx\t\t\t\t0 \t\t\t\tcx");
-      ui->labelCamRow2->setText("0 \t\t\t\tfy\t\t\t\tcy");
-      ui->labelCamRow3->setText("0 \t\t\t\t0 \t\t\t\t1 ");
+      ui->gridCamMatrix->addWidget(ui->labelCameraMatrix, 0, 0, 1, 3);
+      ui->labelCameraMatrix->setText("Camera Matrix:");
+      displayCameraMatrix(1, "fx",  "0",    "cx");
+      displayCameraMatrix(2, "0",   "fy",   "cy");
+      displayCameraMatrix(3, "0",   "0",    "1" );
+      ui->gridDistCoeff->addWidget(ui->labelDistanceCoefficients, 0, 0, 1, 2);
+      ui->labelDistanceCoefficients->setText("Distance Coefficients:");
+      ui->gridDistCoeff->addWidget(ui->labelDistCoeff5, 3, 0, 1, 2);
+//      ui->labelCamRow1->setText("fx\t\t\t\t0 \t\t\t\tcx");
+//      ui->labelCamRow2->setText("0 \t\t\t\tfy\t\t\t\tcy");
+//      ui->labelCamRow3->setText("0 \t\t\t\t0 \t\t\t\t1 ");
 //      QString path = "../../Pics/calib_pic_000.png";        //for tests only
 //      cv::Mat inputImage = cv::imread(toCvString(path), 1); //for tests only
 //      updatePicture(inputImage);                            //for tests only
@@ -108,6 +116,79 @@ vector<cv::Mat> CalibGui::extractPicsWithChessboard(vector<cv::Mat> images) {
         if (this->found[i]) resultImages.push_back(images[i]);
     }
     return resultImages;
+}
+
+// Writes rows of the camera matrix to display it on GUI
+void CalibGui::displayCameraMatrix(int row, double value_col1, double value_col2, double value_col3) {
+    switch (row)
+    {
+    case 1:
+        ui->labelCamRow1_1->setText(QString::number(value_col1));
+        ui->labelCamRow1_2->setText(QString::number(value_col2));
+        ui->labelCamRow1_3->setText(QString::number(value_col3));
+        break;
+    case 2:
+        ui->labelCamRow2_1->setText(QString::number(value_col1));
+        ui->labelCamRow2_2->setText(QString::number(value_col2));
+        ui->labelCamRow2_3->setText(QString::number(value_col3));
+        break;
+    case 3:
+        ui->labelCamRow3_1->setText(QString::number(value_col1));
+        ui->labelCamRow3_2->setText(QString::number(value_col2));
+        ui->labelCamRow3_3->setText(QString::number(value_col3));
+        break;
+    }
+}
+
+// Writes rows of the camera matrix to display it on GUI
+void CalibGui::displayCameraMatrix(int row, QString value_col1, QString value_col2, QString value_col3) {
+    switch (row)
+    {
+    case 1:
+        ui->labelCamRow1_1->setText(value_col1);
+        ui->labelCamRow1_2->setText(value_col2);
+        ui->labelCamRow1_3->setText(value_col3);
+        break;
+    case 2:
+        ui->labelCamRow2_1->setText(value_col1);
+        ui->labelCamRow2_2->setText(value_col2);
+        ui->labelCamRow2_3->setText(value_col3);
+        break;
+    case 3:
+        ui->labelCamRow3_1->setText(value_col1);
+        ui->labelCamRow3_2->setText(value_col2);
+        ui->labelCamRow3_3->setText(value_col3);
+        break;
+    }
+}
+
+void CalibGui::displayCameraMatrix(CalibParams camera) {
+    cv::Mat cameraMatrix = ::getCameraMatrix(camera);
+    ui->labelCamRow1_1->setText(QString::number(cameraMatrix.at<double>(0, 0)));
+    ui->labelCamRow1_2->setText(QString::number(cameraMatrix.at<double>(0, 1)));
+    ui->labelCamRow1_3->setText(QString::number(cameraMatrix.at<double>(0, 2)));
+    ui->labelCamRow2_1->setText(QString::number(cameraMatrix.at<double>(1, 0)));
+    ui->labelCamRow2_2->setText(QString::number(cameraMatrix.at<double>(1, 1)));
+    ui->labelCamRow2_3->setText(QString::number(cameraMatrix.at<double>(1, 2)));
+    ui->labelCamRow3_1->setText(QString::number(cameraMatrix.at<double>(2, 0)));
+    ui->labelCamRow3_2->setText(QString::number(cameraMatrix.at<double>(2, 1)));
+    ui->labelCamRow3_3->setText(QString::number(cameraMatrix.at<double>(2, 2)));
+}
+
+void CalibGui::displayDistanceCoefficients(cv::Mat distanceCoefficients) {
+    ui->labelDistCoeff1->setText(QString::number(distanceCoefficients.at<double>(0, 0)));
+    ui->labelDistCoeff2->setText(QString::number(distanceCoefficients.at<double>(1, 0)));
+    ui->labelDistCoeff3->setText(QString::number(distanceCoefficients.at<double>(2, 0)));
+    ui->labelDistCoeff4->setText(QString::number(distanceCoefficients.at<double>(3, 0)));
+    ui->labelDistCoeff5->setText(QString::number(distanceCoefficients.at<double>(4, 0)));
+}
+
+void CalibGui::changeEvent(QEvent * e) {
+    if(e->type() == QEvent::ActivationChange && this->isActiveWindow()) {
+        if (cameraSettings.isCalibParamsReady())
+            displayCameraMatrix(cameraSettings.getCalibParams());
+        ui->textLogWindow->append(getLogTime() + "Changed activated window.");
+    }
 }
 
 
@@ -189,13 +270,14 @@ void CalibGui::on_buttonPathCameraParam_clicked()
             ui->textCalibBoardH->setText(QString::number(camera.chessboardHeight));
             ui->textCalibSquareSize->setText(QString::number(camera.calibrationSquareSize));
             cameraSettings.setCameraSettings(camera);
+            displayCameraMatrix(camera);
       }
 }
 
 // Shows window with camera paremeters
 void CalibGui::on_buttonChangeCamSettings_clicked()
 {
-            cameraSettings.show();
+    cameraSettings.show();
 }
 
 // Show previous picture from vector
@@ -256,6 +338,7 @@ void CalibGui::on_pButStartCalibration_clicked()
           distanceCoefficients, rVectors, tVectors);
         ui->textLogWindow->append(getLogTime() +
                                   "Calibration ended successfully!");
+        displayDistanceCoefficients(distanceCoefficients);
 
     } else if (savedImages.size() < (unsigned int)minAmountOfPicsToCalibrate &&
                savedImages.size() > 0) {

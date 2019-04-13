@@ -10,6 +10,9 @@
     <height>430</height>
    </rect>
   </property>
+  <property name="features">
+   <set>QDockWidget::DockWidgetMovable</set>
+  </property>
   <property name="windowTitle">
    <string>Camera settings</string>
   </property>
@@ -284,19 +287,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QDialogButtonBox" name="buttonBox">
-    <property name="geometry">
-     <rect>
-      <x>172</x>
-      <y>360</y>
-      <width>176</width>
-      <height>33</height>
-     </rect>
-    </property>
-    <property name="standardButtons">
-     <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-    </property>
-   </widget>
    <widget class="QGroupBox" name="groupDynamixCamSettings">
     <property name="geometry">
      <rect>
@@ -374,6 +364,19 @@
       <set>Qt::AlignCenter</set>
      </property>
     </widget>
+   </widget>
+   <widget class="QPushButton" name="butApply">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>370</y>
+      <width>80</width>
+      <height>25</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>OK</string>
+    </property>
    </widget>
   </widget>
  </widget>

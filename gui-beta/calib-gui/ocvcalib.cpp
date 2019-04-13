@@ -68,7 +68,7 @@ void getChessboardCorners(vector<Mat> images,
 {
     Size chessboardDimensions = Size(camera.chessboardWidth - 1,
                                      camera.chessboardHeight - 1);
-                cv::imshow("test", images[images.size()-1]);
+//                cv::imshow("test", images[images.size()-1]);
     for (vector<Mat>::iterator iter = images.begin(); iter != images.end();
             ++iter) {
         vector<Point2f> pointBuf;

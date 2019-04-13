@@ -32,7 +32,7 @@
    <widget class="QGroupBox" name="gBoxCalibParams">
     <property name="geometry">
      <rect>
-      <x>29</x>
+      <x>20</x>
       <y>0</y>
       <width>500</width>
       <height>220</height>
@@ -75,7 +75,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>55</y>
+       <y>150</y>
        <width>460</width>
        <height>25</height>
       </rect>
@@ -103,7 +103,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>30</y>
+       <y>125</y>
        <width>310</width>
        <height>20</height>
       </rect>
@@ -122,7 +122,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>85</y>
+       <y>180</y>
        <width>460</width>
        <height>30</height>
       </rect>
@@ -147,7 +147,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>125</y>
+       <y>35</y>
        <width>310</width>
        <height>20</height>
       </rect>
@@ -166,7 +166,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>150</y>
+       <y>60</y>
        <width>460</width>
        <height>25</height>
       </rect>
@@ -182,7 +182,7 @@
      <property name="geometry">
       <rect>
        <x>20</x>
-       <y>180</y>
+       <y>90</y>
        <width>200</width>
        <height>30</height>
       </rect>
@@ -201,7 +201,7 @@
      <property name="geometry">
       <rect>
        <x>280</x>
-       <y>180</y>
+       <y>90</y>
        <width>200</width>
        <height>30</height>
       </rect>
@@ -441,73 +441,6 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="verticalLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>40</x>
-      <y>440</y>
-      <width>181</width>
-      <height>101</height>
-     </rect>
-    </property>
-    <layout class="QVBoxLayout" name="verticalLayoutCamMatrix">
-     <item>
-      <widget class="QLabel" name="labelCameraMatrix">
-       <property name="text">
-        <string>Camera Matrix</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelCamRow1">
-       <property name="font">
-        <font>
-         <family>Bitstream Vera Sans Mono</family>
-        </font>
-       </property>
-       <property name="text">
-        <string>hahaha</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelCamRow2">
-       <property name="font">
-        <font>
-         <family>Bitstream Vera Sans Mono</family>
-        </font>
-       </property>
-       <property name="text">
-        <string>hehehe</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLabel" name="labelCamRow3">
-       <property name="font">
-        <font>
-         <family>Bitstream Vera Sans Mono</family>
-        </font>
-       </property>
-       <property name="text">
-        <string>hihihi</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </widget>
    <widget class="QLabel" name="labelIsChessFound">
     <property name="geometry">
      <rect>
@@ -537,6 +470,280 @@
      <string>Start Calibration</string>
     </property>
    </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>450</y>
+      <width>221</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridCamMatrix">
+     <item row="3" column="0">
+      <widget class="QLabel" name="labelCamRow3_1">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hihihi</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="labelCamRow1_2">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hahaha</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QLabel" name="labelCamRow3_2">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hihihi</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="labelCamRow2_3">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hehehe</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="labelCamRow1_3">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hahaha</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="labelCamRow2_2">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hehehe</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="labelCamRow2_1">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hehehe</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="labelCamRow3_3">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hihihi</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="labelCamRow1_1">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+        </font>
+       </property>
+       <property name="text">
+        <string>hahaha</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="1">
+      <widget class="QLabel" name="labelCameraMatrix">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="gridLayoutWidget_2">
+    <property name="geometry">
+     <rect>
+      <x>279</x>
+      <y>449</y>
+      <width>221</width>
+      <height>101</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="gridDistCoeff">
+     <item row="1" column="0">
+      <widget class="QLabel" name="labelDistCoeff1">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="labelDistanceCoefficients">
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="1">
+      <widget class="QLabel" name="labelDistCoeff4">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="labelDistCoeff3">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="labelDistCoeff5">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QLabel" name="labelDistCoeff2">
+       <property name="font">
+        <font>
+         <family>Bitstream Vera Sans Mono</family>
+         <weight>50</weight>
+         <italic>false</italic>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="enabled">
@@ -547,27 +754,11 @@
      <x>0</x>
      <y>0</y>
      <width>1240</width>
-     <height>23</height>
+     <height>22</height>
     </rect>
    </property>
    <property name="locale">
     <locale language="English" country="UnitedStates"/>
-   </property>
-  </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <property name="enabled">
-    <bool>true</bool>
-   </property>
-   <attribute name="toolBarArea">
-    <enum>TopToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
-  <widget class="QStatusBar" name="statusBar">
-   <property name="enabled">
-    <bool>true</bool>
    </property>
   </widget>
  </widget>

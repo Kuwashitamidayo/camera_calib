@@ -34,6 +34,11 @@ public:
     virtual cv::String toCvString(QString text);
     virtual std::vector<cv::String> toVector(QStringList texts);
     virtual std::vector<cv::Mat> extractPicsWithChessboard(vector<cv::Mat> images);
+    virtual void displayCameraMatrix(int row, double value_col1, double value_col2, double value_col3);
+    virtual void displayCameraMatrix(int row, QString value_col1, QString value_col2, QString value_col3);
+    virtual void displayCameraMatrix(CalibParams camera);
+    virtual void displayDistanceCoefficients(cv::Mat distanceCoefficients);
+    void changeEvent(QEvent * e);
     ~CalibGui();
 
 private slots:
@@ -46,8 +51,6 @@ private slots:
     void on_pButPrevPicture_clicked();
 
     void on_pButNextPicture_clicked();
-
-    void on_buttonPathCameraParam_2_clicked();
 
     void on_buttonExportCameraParam_clicked();
 

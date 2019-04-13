@@ -7,6 +7,7 @@
 #include <sys/stat.h>
 #include <sstream>
 
+
 namespace patch
 {
     //Converts any type to string.
