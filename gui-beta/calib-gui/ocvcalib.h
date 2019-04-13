@@ -52,7 +52,6 @@ using namespace std;
 using namespace cv;
 using namespace patch;
 
-
 void createKnownChessboardPosition(Size boardSize, float squareEdgeLength,
   vector<Point3f>& corners);
 void getChessboardCorners(vector<Mat> images,
@@ -63,11 +62,11 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize,
     vector<Mat> &rVectors, vector<Mat> &tVectors, CalibParams camera);
 bool saveCameraCalibration(string name, string nameCalibPic, Mat cameraMatrix,
     Mat distanceCoefficients, vector<Mat> rVectors, vector<Mat> tVectors);
-/*static double computeReprojectionErrors( const vector<vector<Point3f> >& objectPoints,
+double computeReprojectionErrors( const vector<vector<Point3f> >& objectPoints,
     const vector<vector<Point2f> >& imagePoints,
     const vector<Mat>& rvecs, const vector<Mat>& tvecs,
     const Mat& cameraMatrix , const Mat& distCoeffs,
-    vector<float>& perViewErrors);*/
+    vector<float>& perViewErrors);
 string createJpgFile(int &savedImageCount);
 inline bool exists_file(const std::string &name);
 void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix);
@@ -75,6 +74,8 @@ void inline parseParameters(int argc, char** argv, cv::String &keys);
 void loadParametersFromXml(cv::String filename, CalibParams &camera);
 void saveParametersToXml(cv::String filename, CalibParams camera, cv::String header);
 cv::Mat getCameraMatrix(CalibParams camera);
+double getReprojectionError();
+vector<float> getPerViewErrors();
 
 
 

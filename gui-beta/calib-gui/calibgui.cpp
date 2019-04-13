@@ -339,6 +339,16 @@ void CalibGui::on_pButStartCalibration_clicked()
         ui->textLogWindow->append(getLogTime() +
                                   "Calibration ended successfully!");
         displayDistanceCoefficients(distanceCoefficients);
+        ui->textLogWindow->append(getLogTime() +
+                                  "Reprojection error: " +
+                                  QString::number(::getReprojectionError()));
+        vector<float> perViewErrors = ::getPerViewErrors();
+
+        for (int i = 0; i < (int)perViewErrors.size(); i++) {
+            ui->textLogWindow->append(
+                        getLogTime() + "Image no. " + QString::number(i+1) +
+                        " error: " + QString::number(perViewErrors[i]));
+        }
 
     } else if (savedImages.size() < (unsigned int)minAmountOfPicsToCalibrate &&
                savedImages.size() > 0) {

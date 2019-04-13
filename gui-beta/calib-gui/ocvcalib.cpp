@@ -48,6 +48,9 @@ double fy = (double)camera.matrixCurrRes.y * camera.focalLength
 double cx = camera.matrixCurrRes.x / 2;
 double cy = camera.matrixCurrRes.y / 2;
 
+// For computing reprojection error
+double reprojectionError = 20.5;
+vector<float> perViewErrors;
 
 
 /* Beginning of the program */
@@ -123,6 +126,11 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize,
 
     calibrateCamera(worldSpaceCornerPoints, checkerboardImageSpacePoints,
       boardSize, cameraMatrix, distanceCoefficients, rVectors, tVectors);
+
+    reprojectionError = computeReprojectionErrors(
+                worldSpaceCornerPoints, checkerboardImageSpacePoints,
+                rVectors, tVectors, cameraMatrix, distanceCoefficients,
+                perViewErrors);
 //    cout << "Camera calibration finished." << endl;
 }
 
@@ -141,8 +149,8 @@ bool saveCameraCalibration(string name, string nameCalibPic, Mat cameraMatrix,
     return true;
 }
 
-/* Error reprojection estimation - https://docs.opencv.org/3.1.0/d4/d94/tutorial_camera_calibration.html
-static double computeReprojectionErrors( const vector<vector<Point3f> >& objectPoints,
+/* Error reprojection estimation - https://docs.opencv.org/3.1.0/d4/d94/tutorial_camera_calibration.html */
+double computeReprojectionErrors( const vector<vector<Point3f> >& objectPoints,
                                          const vector<vector<Point2f> >& imagePoints,
                                          const vector<Mat>& rvecs, const vector<Mat>& tvecs,
                                          const Mat& cameraMatrix , const Mat& distCoeffs,
@@ -163,7 +171,7 @@ static double computeReprojectionErrors( const vector<vector<Point3f> >& objectP
         totalPoints     += n;
     }
     return std::sqrt(totalErr/totalPoints);
-}*/
+}
 
 
 string createJpgFile(int &savedImageCount) {
@@ -250,7 +258,7 @@ void inline parseParameters(int argc, char** argv, cv::String &keys, CalibParams
         //return 0;
     }
 
-    if (parser.has("terminal") && ~parser.has("loadconf")) {
+    if (parser.has("terminal") && !parser.has("loadconf")) {
         /*   Calib parameters   */
         camera.pathToCalibPics 		= parser.get<string>("path");
         cout << "Current path: " << camera.pathToCalibPics << std::endl;
@@ -319,4 +327,12 @@ void saveParametersToXml(cv::String filename, CalibParams camera,
     outCalibStream << "matrixSize"				<< camera.matrixSize;
     outCalibStream << "focalLength"				<< camera.focalLength;
     outCalibStream.release();
+}
+
+double getReprojectionError() {
+    return reprojectionError;
+};
+
+vector<float> getPerViewErrors() {
+    return perViewErrors;
 }
