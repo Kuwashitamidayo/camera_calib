@@ -17,8 +17,8 @@ CalibGui::CalibGui(QWidget *parent) :
       QMainWindow(parent),
       ui(new Ui::CalibGui),
       minAmountOfPicsToCalibrate(0),
-      countImages(0),
-      totalImages(0)
+      countImages(0),   // number of picture that is shown
+      totalImages(0)    // total amount of pictures selected for calibration
 {
       QDoubleValidator *squareSizeVal = new QDoubleValidator( 0.01, 100.0, 2, this );
       squareSizeVal->setNotation(QDoubleValidator::StandardNotation);
@@ -39,9 +39,6 @@ CalibGui::CalibGui(QWidget *parent) :
       ui->gridDistCoeff->addWidget(ui->labelDistanceCoefficients, 0, 0, 1, 2);
       ui->labelDistanceCoefficients->setText("Distance Coefficients:");
       ui->gridDistCoeff->addWidget(ui->labelDistCoeff5, 3, 0, 1, 2);
-//      ui->labelCamRow1->setText("fx\t\t\t\t0 \t\t\t\tcx");
-//      ui->labelCamRow2->setText("0 \t\t\t\tfy\t\t\t\tcy");
-//      ui->labelCamRow3->setText("0 \t\t\t\t0 \t\t\t\t1 ");
 //      QString path = "../../Pics/calib_pic_000.png";        //for tests only
 //      cv::Mat inputImage = cv::imread(toCvString(path), 1); //for tests only
 //      updatePicture(inputImage);                            //for tests only
@@ -60,8 +57,6 @@ QString CalibGui::getLogTime() {
 
 // Displays count'th picture if loaded,
 void CalibGui::updatePicture(int count) {
-    countImages = count;
-    totalImages = fileNames.size();
     QPixmap imageCalib;
     imageCalib.load(fileNames[count-1]);
     ui->imgCalibImage->setScaledContents(true);
@@ -207,13 +202,15 @@ void CalibGui::on_buttonPathImages_clicked()
      * between squares, that's why 1 s substracted */
     chessboardDimensions = cv::Size(camera.chessboardWidth - 1,
                                     camera.chessboardHeight - 1);
-    // check if needed parameters are positive numbers greater than 0
+
     #ifdef CALIB_PRINT_DEBUG
     QString msg = "Chessboard width: " + QString::number(camera.chessboardWidth) + "mm\n"
                   "Chessboard height: " + QString::number(camera.chessboardHeight) + "mm\n"
                   "Square side size: " + QString::number(camera.calibrationSquareSize) + "mm\n";
     QMessageBox::warning(this, "Checking the parameters...", msg);
     #endif
+
+    // check if needed parameters are positive numbers greater than 0
     if (((camera.chessboardHeight > 0)) && (camera.chessboardWidth > 0)
             && (camera.calibrationSquareSize > 0))
     {
@@ -225,10 +222,14 @@ void CalibGui::on_buttonPathImages_clicked()
             // clearing vectors
             found.clear();
             cvFiles.clear();
+            cvImages.clear();
             matChessPics.clear();
 
+            //setting 1st image as the one that should be displayed
+            countImages = 1;
             totalImages = fileNames.size();
             count = fileNames.size()-1;
+
             if (count == 0) {
                 ui->textImagesPath->setText(fileNames[0]);
             } else {
@@ -249,10 +250,16 @@ void CalibGui::on_buttonPathImages_clicked()
                                       foundPoints, found[i]);
                 matChessPics.push_back(tempPic);
             }
-            updatePicture(matChessPics, 1);
+            updatePicture(matChessPics, countImages);
 
             ui->textLogWindow->append(getLogTime() + "Total: " +
                 QString::number(fileNames.size()) + " images.");
+
+            #ifdef CALIB_PRINT_DEBUG
+            QString msg = "Count image: " + QString::number(countImages) + "\n"
+                        "Total images: " + QString::number(totalImages) + "\n";
+            QMessageBox::warning(this, "Showing counted and total images...", msg);
+            #endif
         }
     } else {
         // warning message if parameters are incorrect

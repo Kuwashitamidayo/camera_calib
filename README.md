@@ -32,7 +32,7 @@ If you don't have a camera parameters, you will have to fill all the boxes for c
 If not, please fill calibration chessboard settings table. The width and height of calibration chessboard is a sum of white and black squares in a row and column. Order does not matter - you can type 8x11 or 11x8. For squre side size please type its size in milimeters.\
 **Note:** If you use even numbers for both calibration chessboard width and height, program may crash. If at least one of them is an odd number, everything should be fine.
 3. Fill the camera parameters available under the "Change camera settings" button. For now "Select camera" list is useless - sorry. Please fill are boxes with correct values, all of them should be greater than zero.
-4. (Optional) You can export filled parameters into a file using "Export current settings" button. You will be asked for a file name and camera name. After that you will be able to make a calibration with loading a single config file instead of typing all parameters manually (you  will be able to skip points 2-4). 
+4. (Optional) You can export filled parameters into a file using "Export current settings" button. You will be asked for a file name and camera name. After that you will be able to make a calibration with loading a single config file instead of typing all parameters manually (you  will be able to skip points 2-4). Remember to add file extensios (.xml or .yml) at the end of the file!
 5. Load calibration files using "Select path" button. Here you should load multiple files. After loading them you can check whether calibration chessboard was found or not.
 6. If everything is ok, press "Start Calibration" to calibrate. Calibration result files are generated to the same location as executable file for calibration program, and they are named camera_calibration.xml and camera_calibration_pic_data.xml. In the future it will be improved.
 
@@ -48,3 +48,5 @@ Please note that this program was made for personal use (it was element of thesi
 
 # Useful links
 [Chessboard generator](https://calib.io/pages/camera-calibration-pattern-generator)
+[Part1](https://www.youtube.com/watch?v=HNfPbw-1e_w) [Part2](https://www.youtube.com/watch?v=v7jutAmWJVQ) [Part3](https://www.youtube.com/watch?v=l4gGX-5_5q0) [Part4](https://www.youtube.com/watch?v=GYIQiV9Aw74) - Youtube tutorial, on which this program was based
+[OpenCV camera calibration tutorial](https://docs.opencv.org/3.4.3/d4/d94/tutorial_camera_calibration.html)
