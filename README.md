@@ -36,17 +36,15 @@ If not, please fill calibration chessboard settings table. The width and height 
 5. Load calibration files using "Select path" button. Here you should load multiple files. After loading them you can check whether calibration chessboard was found or not.
 6. If everything is ok, press "Start Calibration" to calibrate. Calibration result files are generated to the same location as executable file for calibration program, and they are named camera_calibration.xml and camera_calibration_pic_data.xml. In the future it will be improved.
 
-
-
 # Libraries and used software
 - OpenCV 3.4.4
 - Qt Creator 3.5.1 based on Qt 5.5.1 or newer (Qt Creator 4.5.2 based on Qt 5.9.5 was also OK)
 - Linux (here Linux Mint 18.3 and 19.1), after a few changes it can be converted to run under Windows
 
 # Disclaimer
-Please note that this program was made for personal use (it was element of thesis) so it may contain some bugs (e. g. not all of the exceptions are handled). I am not taking responsibility for any of them. If you find some please let me know. I am not super active, but when time comes, I am going to fix them. ;)
+Please note that this program was made for personal use (it was element of thesis) so it may contain some bugs (e. g. not all of the exceptions are handled). I am not taking responsibility for any of them. If you find some please let me know. I am not super active, but when time comes, I am going to fix all bugs. ;)
 
 # Useful links
-[Chessboard generator](https://calib.io/pages/camera-calibration-pattern-generator)
-[Part1](https://www.youtube.com/watch?v=HNfPbw-1e_w) [Part2](https://www.youtube.com/watch?v=v7jutAmWJVQ) [Part3](https://www.youtube.com/watch?v=l4gGX-5_5q0) [Part4](https://www.youtube.com/watch?v=GYIQiV9Aw74) - Youtube tutorial, on which this program was based
-[OpenCV camera calibration tutorial](https://docs.opencv.org/3.4.3/d4/d94/tutorial_camera_calibration.html)
+[Chessboard generator](https://calib.io/pages/camera-calibration-pattern-generator)\
+[Part1](https://www.youtube.com/watch?v=HNfPbw-1e_w) [Part2](https://www.youtube.com/watch?v=v7jutAmWJVQ) [Part3](https://www.youtube.com/watch?v=l4gGX-5_5q0) [Part4](https://www.youtube.com/watch?v=GYIQiV9Aw74) - Youtube tutorial, on which this program was based\
+[OpenCV camera calibration tutorial](https://docs.opencv.org/3.4.3/d4/d94/tutorial_camera_calibration.html)\
