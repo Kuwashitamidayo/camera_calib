@@ -45,6 +45,23 @@ namespace cv
         Point2d matrixSize;
         // Focal length in mm
         double focalLength;
+
+        CalibParams() {
+            pathToCalibPics = "";
+            calibrationSquareSize = 0.0;
+            chessboardWidth = 0;
+            chessboardHeight = 0;
+            header = "";
+            pixelSize.x = 0;
+            pixelSize.y = 0;
+            matrixMaxRes.x = 0;
+            matrixMaxRes.y = 0;
+            matrixCurrRes.x = 0;
+            matrixCurrRes.y = 0;
+            matrixSize.x = 0;
+            matrixSize.y = 0;
+            focalLength = 0.0;
+        };
     };
 }
 
@@ -76,6 +93,7 @@ void saveParametersToXml(cv::String filename, CalibParams camera, cv::String hea
 cv::Mat getCameraMatrix(CalibParams camera);
 double getReprojectionError();
 vector<float> getPerViewErrors();
+void clearPerViewErrors();
 
 
 

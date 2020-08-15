@@ -1,5 +1,6 @@
 #include "calibgui.h"
 #include "ui_calibgui.h"
+//#define CALIB_PRINT_DEBUG 1
 
 using namespace cv;
 using namespace std;
@@ -187,7 +188,7 @@ void CalibGui::changeEvent(QEvent * e) {
     if(e->type() == QEvent::ActivationChange && this->isActiveWindow()) {
         if (cameraSettings.isCalibParamsReady())
             displayCameraMatrix(cameraSettings.getCalibParams());
-        ui->textLogWindow->append(getLogTime() + "Changed activated window.");
+//        ui->textLogWindow->append(getLogTime() + "Changed activated window.");
     }
 }
 
@@ -207,6 +208,12 @@ void CalibGui::on_buttonPathImages_clicked()
     chessboardDimensions = cv::Size(camera.chessboardWidth - 1,
                                     camera.chessboardHeight - 1);
     // check if needed parameters are positive numbers greater than 0
+    #ifdef CALIB_PRINT_DEBUG
+    QString msg = "Chessboard width: " + QString::number(camera.chessboardWidth) + "mm\n"
+                  "Chessboard height: " + QString::number(camera.chessboardHeight) + "mm\n"
+                  "Square side size: " + QString::number(camera.calibrationSquareSize) + "mm\n";
+    QMessageBox::warning(this, "Checking the parameters...", msg);
+    #endif
     if (((camera.chessboardHeight > 0)) && (camera.chessboardWidth > 0)
             && (camera.calibrationSquareSize > 0))
     {
@@ -263,14 +270,35 @@ void CalibGui::on_buttonPathCameraParam_clicked()
             "Select camera configuration file", QDir::currentPath(),
             "Configuration files (*.xml *.yml);; All Files (*)");
       if(fileName != "") {
+          try {
             ui->textCameraParamsPath->setText(fileName);
             ui->textLogWindow->append(getLogTime() + "Loaded " + fileName);
             ::loadParametersFromXml(toCvString(fileName), camera);
+
+            if(camera.header == "" || camera.focalLength == 0 ||
+                    camera.pixelSize.x <= 0 || camera.pixelSize.y <= 0 ||
+                    camera.chessboardHeight <= 0 || camera.chessboardWidth <= 0) {
+                throw std::invalid_argument("Received invalid or no arguments!");
+            }
+
             ui->textCalibBoardW->setText(QString::number(camera.chessboardWidth));
             ui->textCalibBoardH->setText(QString::number(camera.chessboardHeight));
             ui->textCalibSquareSize->setText(QString::number(camera.calibrationSquareSize));
             cameraSettings.setCameraSettings(camera);
             displayCameraMatrix(camera);
+          } catch (std::invalid_argument& ia) {
+              QString msg = "Invalid content of the file - aborted. \n"
+                            "Are you sure this is the config file with camera parameters? "
+                            "If yes, please check if parameters are filled or OK. ";
+              QMessageBox::warning(this, "Warning - wrong file (invalid parameters)", msg);
+              ui->textLogWindow->append(getLogTime() + "Error while loading config file " + fileName
+                                        + " - probably not a camera parameters file.");
+          } catch (Exception& e) {
+              QString msg = "Invalid content of the file - aborted. \n"
+                            "Probably not a camera parameters config file.";
+              QMessageBox::warning(this, "Warning - wrong file", msg);
+              ui->textLogWindow->append(getLogTime() + "Error while loading config file " + fileName);
+          }
       }
 }
 
@@ -316,7 +344,6 @@ void CalibGui::on_buttonExportCameraParam_clicked()
 }
 
 // Starts the calibration, providing that parameters are given and pictures are loaded
-// Not finished yet
 void CalibGui::on_pButStartCalibration_clicked()
 {
     Mat distanceCoefficients;
@@ -325,10 +352,11 @@ void CalibGui::on_pButStartCalibration_clicked()
     cameraMatrix = ::getCameraMatrix(camera);
     chessboardDimensions = cv::Size(camera.chessboardWidth - 1,
                                     camera.chessboardHeight - 1);
+    ::clearPerViewErrors(); //clear repr. errors
+
     if (savedImages.size() > (unsigned int)minAmountOfPicsToCalibrate) {
         // starts the calibration
         ui->textLogWindow->append(getLogTime() + "Calibration has started...");
-//        ::cameraCalibration()
 
         ::cameraCalibration(savedImages, chessboardDimensions,
           camera.calibrationSquareSize, cameraMatrix,

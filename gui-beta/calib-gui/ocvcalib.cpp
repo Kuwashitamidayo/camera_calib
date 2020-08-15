@@ -131,6 +131,11 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize,
                 worldSpaceCornerPoints, checkerboardImageSpacePoints,
                 rVectors, tVectors, cameraMatrix, distanceCoefficients,
                 perViewErrors);
+
+    FileStorage outStream("Data for homography.xml", FileStorage::WRITE);
+    outStream       << "objectPoints" << worldSpaceCornerPoints;
+    outStream       << "imagePoints" << checkerboardImageSpacePoints;
+    outStream.release();
 //    cout << "Camera calibration finished." << endl;
 }
 
@@ -335,4 +340,8 @@ double getReprojectionError() {
 
 vector<float> getPerViewErrors() {
     return perViewErrors;
+}
+
+void clearPerViewErrors() {
+    perViewErrors.clear();
 }
