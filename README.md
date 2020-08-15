@@ -5,7 +5,7 @@
 # Camera calibration using OpenCV - project
 The plan is to create a camera calibration program with some nice GUI (using Qt library). This is the small part of my master's dissertation that I will show here. The other part, which uses calibration parameters to undistort the camera and recognize pose of elements on the picture will not be shown nor avalable.\
 The base alghoritm is based on YouTube manual, see comments in the code.\
-Here I will also put some interesting links with useful information needed to do camera calibration correctly.
+Here I will also put some interesting links with useful information needed to do camera calibration correctly. Hope this will be helpful for anyone.
 
 # Sample screenshots of the program
 
@@ -20,12 +20,13 @@ Here I will also put some interesting links with useful information needed to do
 - make the program using *make*,
 - call program in terminal mode using *./calibration -terminal*
 
-## Using gui mode
+## Using gui mode (with graphical interface)
 - open QT Creator,
-- open the project in *gui_beta*,
-- compile it and run.
+- open the project in *gui-beta/calib-gui*,
+- compile it and run,
+- if you want to run it from Terminal, go to *gui-beta/build-calib-gui-Desktop-Debug*, run Terminal there and type *./calib-gui*. 
 
-# How to use the program (with GUI version)
+# How to use the program (gui version)
 1. If you have a camera parameters file, please load it here using "Select path..." button. You can use attached camera_params.xml file with parameters for Raspberry Pi Camera 2.0 B and chessboard with 8x11 squares, 15x15mm each. You can load your own file if you saved your filled parameters (point **4**).\
 If you don't have a camera parameters, you will have to fill all the boxes for camera parameters and calibration chessboard parameters. 
 2. If you loaded the file, skip to point **5**.\
@@ -47,4 +48,5 @@ Please note that this program was made for personal use (it was element of thesi
 # Useful links
 [Chessboard generator](https://calib.io/pages/camera-calibration-pattern-generator)\
 [Part1](https://www.youtube.com/watch?v=HNfPbw-1e_w) [Part2](https://www.youtube.com/watch?v=v7jutAmWJVQ) [Part3](https://www.youtube.com/watch?v=l4gGX-5_5q0) [Part4](https://www.youtube.com/watch?v=GYIQiV9Aw74) - Youtube tutorial, on which this program was based\
-[OpenCV camera calibration tutorial](https://docs.opencv.org/3.4.3/d4/d94/tutorial_camera_calibration.html)
+[OpenCV camera calibration tutorial](https://docs.opencv.org/3.4.3/d4/d94/tutorial_camera_calibration.html)\
+[Link1](https://calib.io/blogs/knowledge-base/calibration-best-practices) [Link2](https://dsp.stackexchange.com/questions/1567/how-do-i-get-the-most-accurate-camera-calibration) - Good practices when preparing a camera calibration
