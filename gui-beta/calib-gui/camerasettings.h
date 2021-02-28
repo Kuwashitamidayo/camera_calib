@@ -25,19 +25,12 @@ public:
 
 private slots:
   void on_textCamPixSizeX_textChanged(const QString &arg1);
-
   void on_textCamPixSizeY_textChanged(const QString &arg1);
-
   void on_textMaxCamResX_textChanged(const QString &arg1);
-
   void on_textMaxCamResY_textChanged(const QString &arg1);
-
   void on_butApply_clicked();
-
   void on_textFocalLength_textChanged(const QString &arg1);
-
   void on_textCurrentCamResX_textChanged(const QString &arg1);
-
   void on_textCurrentCamResY_textChanged(const QString &arg1);
 
 private:

@@ -43,17 +43,11 @@ public:
 
 private slots:
     void on_buttonPathImages_clicked();
-
     void on_buttonPathCameraParam_clicked();
-
     void on_buttonChangeCamSettings_clicked();
-
     void on_pButPrevPicture_clicked();
-
     void on_pButNextPicture_clicked();
-
     void on_buttonExportCameraParam_clicked();
-
     void on_pButStartCalibration_clicked();
 
 private:

@@ -14,6 +14,7 @@ CameraSettings::CameraSettings(QWidget *parent) :
     QDoubleValidator *camElemSizeVal = new QDoubleValidator( 0.000001, 1000.0, 6, this );
     camElemSizeVal->setNotation(QDoubleValidator::StandardNotation);
     QIntValidator *resVal = new QIntValidator( 1, 10000, this );
+
     ui->setupUi(this);
     ui->textCamMatrixSizeX->setValidator(camElemSizeVal);
     ui->textCamMatrixSizeY->setValidator(camElemSizeVal);
@@ -33,16 +34,17 @@ CameraSettings::~CameraSettings()
 
 void CameraSettings::setCameraSettings(CalibParams camera)
 {
-    ui->textCamMatrixSizeX->setText(QString::number(camera.matrixSize.x));
-    ui->textCamMatrixSizeY->setText(QString::number(camera.matrixSize.y));
-    ui->textCamPixSizeX->setText(QString::number(camera.pixelSize.x));
-    ui->textCamPixSizeY->setText(QString::number(camera.pixelSize.y));
-    ui->textFocalLength->setText(QString::number(camera.focalLength));
-    ui->textMaxCamResX->setText(QString::number(camera.matrixMaxRes.x));
-    ui->textMaxCamResY->setText(QString::number(camera.matrixMaxRes.y));
-    ui->textCurrentCamResX->setText(QString::number(camera.matrixCurrRes.x));
-    ui->textCurrentCamResY->setText(QString::number(camera.matrixCurrRes.y));
-    ui->comboCameraName->addItem(QString::fromStdString((string)camera.header));
+    ui->textCamMatrixSizeX  ->  setText(QString::number(camera.matrixSize.x));
+    ui->textCamMatrixSizeY  ->  setText(QString::number(camera.matrixSize.y));
+    ui->textCamPixSizeX     ->  setText(QString::number(camera.pixelSize.x));
+    ui->textCamPixSizeY     ->  setText(QString::number(camera.pixelSize.y));
+    ui->textFocalLength     ->  setText(QString::number(camera.focalLength));
+    ui->textMaxCamResX      ->  setText(QString::number(camera.matrixMaxRes.x));
+    ui->textMaxCamResY      ->  setText(QString::number(camera.matrixMaxRes.y));
+    ui->textCurrentCamResX  ->  setText(QString::number(camera.matrixCurrRes.x));
+    ui->textCurrentCamResY  ->  setText(QString::number(camera.matrixCurrRes.y));
+
+    ui->comboCameraName     ->  addItem(QString::fromStdString((string)camera.header));
 }
 
 CalibParams CameraSettings::getCalibParams() {

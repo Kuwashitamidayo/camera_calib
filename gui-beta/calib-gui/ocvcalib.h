@@ -23,28 +23,18 @@ namespace cv
 {
     struct CalibParams {
         /* Calib init parameters */
-        // Path to pictures
-        String pathToCalibPics;
-        // Size of square, in milimeters
-        float calibrationSquareSize;
-        // Width of calib chessboard as number of squares
-        int chessboardWidth;
-        // Height of calib chessboard as number of squares
-        int chessboardHeight;
+        String pathToCalibPics;         // Path to pictures
+        float calibrationSquareSize;    // Size of square, in milimeters
+        int chessboardWidth;            // Width of calib chessboard as number of squares
+        int chessboardHeight;           // Height of calib chessboard as number of squares
 
         /* Camera parameters */
-        // name of the camera (optional)
-        String header;
-        // Size of pixel in x and y axis in mm
-        Point2d pixelSize;
-        // Max resolution of the camera
-        Point matrixMaxRes;
-        // Current set resolution of the camera
-        Point matrixCurrRes;
-        // Size of the camera sensor in x and y axis in mm
-        Point2d matrixSize;
-        // Focal length in mm
-        double focalLength;
+        String header;                  // name of the camera (optional)
+        Point2d pixelSize;              // Size of pixel in x and y axis in mm
+        Point matrixMaxRes;             // Max resolution of the camera
+        Point matrixCurrRes;            // Current set resolution of the camera
+        Point2d matrixSize;             // Size of the camera sensor in x and y axis in mm
+        double focalLength;             // Focal length in mm
 
         CalibParams() {
             pathToCalibPics = "";
@@ -84,12 +74,16 @@ double computeReprojectionErrors( const vector<vector<Point3f> >& objectPoints,
     const vector<Mat>& rvecs, const vector<Mat>& tvecs,
     const Mat& cameraMatrix , const Mat& distCoeffs,
     vector<float>& perViewErrors);
+
 string createJpgFile(int &savedImageCount);
 inline bool exists_file(const std::string &name);
+
 void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix);
 void inline parseParameters(int argc, char** argv, cv::String &keys);
 void loadParametersFromXml(cv::String filename, CalibParams &camera);
 void saveParametersToXml(cv::String filename, CalibParams camera, cv::String header);
+
+void setCameraParameters(CalibParams camera);
 cv::Mat getCameraMatrix(CalibParams camera);
 double getReprojectionError();
 vector<float> getPerViewErrors();

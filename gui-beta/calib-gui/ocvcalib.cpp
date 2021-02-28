@@ -10,43 +10,31 @@
 */
 CalibParams camera;
 /* Calib init parameters */
-// Path to pictures
-string pathToCalibPics;
-// Width of calib chessboard as number of squares
-int chessboardWidth;
-// Height of calib chessboard as number of squares
-int chessboardHeight;
-// Minimal amount of pics needed to start the calibration
-unsigned int minAmountOfPicsToCalibrate = 20;
-// Size of square, in milimeters
-float calibrationSquareSize;
+string pathToCalibPics;     // Path to pictures
+int chessboardWidth;        // Width of calib chessboard as number of squares
+int chessboardHeight;       // Height of calib chessboard as number of squares
+unsigned int minAmountOfPicsToCalibrate = 20;   // Minimal amount of pics needed to start the calibration
+float calibrationSquareSize;// Size of square, in milimeters
 
-// Size of chessboard = square intersections in each axis
-Size chessboardDimensions;
+Size chessboardDimensions;  // Size of chessboard = square intersections in each axis
 
 /* Camera parameters */
-// Size of pixel in x and y axis in mm
-Point2d pixelSize;
-// Max resolution of the camera
-Point matrixMaxRes;
-// Current set resolution of the camera
-Point matrixCurrRes;
-// Size of the camera sensor in x and y axis in mm
-Point2d matrixSize;
-// Focal length in mm
-double focalLength;// = 	6.0;
+Point2d pixelSize;          // Size of pixel in x and y axis in mm
+Point matrixMaxRes;         // Max resolution of the camera
+Point matrixCurrRes;        // Current set resolution of the camera
+Point2d matrixSize;         // Size of the camera sensor in x and y axis in mm
+
+double focalLength;// =6.0; // Focal length in mm
 
 //double fx = (double)matrixCurrRes.x * focalLength / matrixSize.x;
 //double fy = (double)matrixCurrRes.y * focalLength / matrixSize.y;
 //double cx = matrixCurrRes.x / 2;
 //double cy = matrixCurrRes.y / 2;
 
-double fx = (double)camera.matrixCurrRes.x * camera.focalLength
-        / camera.matrixSize.x;
-double fy = (double)camera.matrixCurrRes.y * camera.focalLength
-        / camera.matrixSize.y;
-double cx = camera.matrixCurrRes.x / 2;
-double cy = camera.matrixCurrRes.y / 2;
+double fx;
+double fy;
+double cx;
+double cy;
 
 // For computing reprojection error
 double reprojectionError = 20.5;
@@ -98,15 +86,15 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize,
   vector<Mat> &rVectors, vector<Mat> &tVectors, CalibParams camera)
 {
     vector< vector< Point2f > > checkerboardImageSpacePoints;
-//    cout << "Searching chessboard corners in progress..." << endl;
+    //  Searching chessboard corners in progress...
     getChessboardCorners(calibrationImages,
       checkerboardImageSpacePoints, camera, false);
 
     vector< vector< Point3f > > worldSpaceCornerPoints(1);
-//    cout << "Creating known chessboard positions..." << endl;
+    //  Creating known chessboard positions...
     createKnownChessboardPosition(boardSize, squareEdgeLength,
       worldSpaceCornerPoints[0]);
-//    cout << "Creating vector of size of chessboard corners amount..." << endl;
+    //  Creating vector of size of chessboard corners amount...
     worldSpaceCornerPoints.resize(checkerboardImageSpacePoints.size(),
       worldSpaceCornerPoints[0]);
 
@@ -136,7 +124,7 @@ void cameraCalibration(vector<Mat> calibrationImages, Size boardSize,
     outStream       << "objectPoints" << worldSpaceCornerPoints;
     outStream       << "imagePoints" << checkerboardImageSpacePoints;
     outStream.release();
-//    cout << "Camera calibration finished." << endl;
+    //  Camera calibration finished.
 }
 
 bool saveCameraCalibration(string name, string nameCalibPic, Mat cameraMatrix,
@@ -202,41 +190,19 @@ Creates matrix of camera parameters which looks like this:
 |	cx		cy		1	|
 and saves all camera parameters to camera_intrinsic.xml
 */
-void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix) {
-    cameraMatrix = Mat::eye(3, 3, CV_64F);
-
-    cameraMatrix.at<double>(0, 0)	= fx;
-    cameraMatrix.at<double>(1, 0)	= 0;
-    cameraMatrix.at<double>(2, 0)	= 0;
-    cameraMatrix.at<double>(0, 1)	= 0;
-    cameraMatrix.at<double>(1, 1)	= fy;
-    cameraMatrix.at<double>(2, 1)	= 0;
-    cameraMatrix.at<double>(0, 2)	= cx;
-    cameraMatrix.at<double>(1, 2)	= cy;
-    cameraMatrix.at<double>(2, 2)	= 1;
-
-
-    FileStorage outCamStream("camera_intrinsic.xml", FileStorage::WRITE);
-    outCamStream << "header" 		<< "Raspberry Pi Camera 2.0 B";
-    outCamStream << "pixelSize" 	<< pixelSize;
-    outCamStream << "matrixMaxRes" 	<< matrixMaxRes;
-    outCamStream << "matrixCurrRes"	<< matrixCurrRes;
-    outCamStream << "matrixSize" 	<< matrixSize;
-    outCamStream << "focalLength" 	<< focalLength;
-    outCamStream << "cameraMatrix" 	<< cameraMatrix;
-    outCamStream.release();
-
+void setCameraParameters(CalibParams camera) {
+    fx = (double)camera.matrixCurrRes.x * camera.focalLength
+            / camera.matrixSize.x;
+    fy = (double)camera.matrixCurrRes.y * camera.focalLength
+            / camera.matrixSize.y;
+    cx = camera.matrixCurrRes.x / 2;
+    cy = camera.matrixCurrRes.y / 2;
 }
 
 cv::Mat getCameraMatrix(CalibParams camera) {
     cv::Mat cameraMatrix = Mat::eye(3, 3, CV_64F);
 
-    double fx = (double)camera.matrixCurrRes.x * camera.focalLength
-            / camera.matrixSize.x;
-    double fy = (double)camera.matrixCurrRes.y * camera.focalLength
-            / camera.matrixSize.y;
-    double cx = camera.matrixCurrRes.x / 2;
-    double cy = camera.matrixCurrRes.y / 2;
+    setCameraParameters(camera);
 
     cameraMatrix.at<double>(0, 0)	= fx;
     cameraMatrix.at<double>(1, 0)	= 0;
@@ -250,6 +216,22 @@ cv::Mat getCameraMatrix(CalibParams camera) {
 
     return cameraMatrix;
 }
+
+void saveIntrinsicCameraParameters(cv::Mat &cameraMatrix, CalibParams camera) {
+    cameraMatrix = getCameraMatrix(camera);
+
+    FileStorage outCamStream("camera_intrinsic.xml", FileStorage::WRITE);
+    outCamStream << "header" 		<< "Raspberry Pi Camera 2.0 B";
+    outCamStream << "pixelSize" 	<< pixelSize;
+    outCamStream << "matrixMaxRes" 	<< matrixMaxRes;
+    outCamStream << "matrixCurrRes"	<< matrixCurrRes;
+    outCamStream << "matrixSize" 	<< matrixSize;
+    outCamStream << "focalLength" 	<< focalLength;
+    outCamStream << "cameraMatrix" 	<< cameraMatrix;
+    outCamStream.release();
+
+}
+
 
 /*
 Method to parse parameters from command line or xml file to a program.
@@ -294,12 +276,7 @@ void inline parseParameters(int argc, char** argv, cv::String &keys, CalibParams
     chessboardDimensions = Size(camera.chessboardWidth,
                                 camera.chessboardHeight);
 
-    fx = (double)camera.matrixCurrRes.x * camera.focalLength
-            / camera.matrixSize.x;
-    fy = (double)camera.matrixCurrRes.y * camera.focalLength
-            / camera.matrixSize.y;
-    cx = camera.matrixCurrRes.x / 2;
-    cy = camera.matrixCurrRes.y / 2;
+    setCameraParameters(camera);
 }
 
 
